@@ -5,3 +5,7 @@
 /Education.API/obj
 /Education.Application/obj
 /Education.Core/obj
+/.vs
+/Education.API/bin/Debug/net6.0
+/Education.Core/bin/Debug/net6.0
+/Education.Application/bin/Debug

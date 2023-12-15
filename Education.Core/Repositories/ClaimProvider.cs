@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Education.Core.Interface;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Education.Core.Repositories
 {
-    public class ClaimProvider
+    public class ClaimProvider:IClaimProvider
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
 
