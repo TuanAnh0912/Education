@@ -8,9 +8,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Education.Application.Service
+namespace Education.Application.Service.Base
 {
-    public class BaseService<T> : IBaseService<T> where T:class
+    public class BaseService<T> : IBaseService<T> where T : class
     {
         private readonly IGenericRepository<T> _genericRepository;
         protected Guid _UserID

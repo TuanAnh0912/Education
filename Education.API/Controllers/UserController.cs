@@ -1,9 +1,11 @@
 ﻿using Education.Application.Interface;
 using Education.Core.Model;
 using Education.Core.Model.Core;
+using Education.Core.Model.DataModel;
 using Education.Core.Model.RequestModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OfficeOpenXml.DataValidation;
 using System.ComponentModel;
 using System.Reflection;
 
@@ -16,9 +18,11 @@ namespace Education.API.Controllers
     public class UserController : BaseServiceController<User>
     {
         readonly IUserService _userService;
+        readonly ICheckExamsService _checkExamsService;
         public UserController(IUserService baseService, IServiceProvider serviceProvider) : base(baseService)
         {
             _userService = serviceProvider.GetRequiredService<IUserService>();
+            _checkExamsService = serviceProvider.GetRequiredService<ICheckExamsService>();
             this.currentType = typeof(License);
         }
         [HttpPost("create-user")]
@@ -26,6 +30,38 @@ namespace Education.API.Controllers
         public async Task<ServiceResponse> CreateUser([FromBody] User user)
         {
             return await _userService.Add(user);
+        }
+        [HttpGet("excel")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Excel()
+        {
+            var lstData = new List<StudentDetects>() { new StudentDetects()
+                {
+                    StudentName = "Bùi Tuấn Anh",
+                    LstResult = new List<string>(){"A","B","D"},
+                    ExamsCode = "BHGSU",
+                    StudentCode = "B-0825"
+
+                },
+                new StudentDetects()
+                {
+                    StudentName = "Bùi Tuấn Minh",
+                    LstResult = new List<string>(){"A","B","D"},
+                    ExamsCode = "BHGSU",
+                    StudentCode = "B-0829"
+                }
+
+            };
+            var streamData = await _checkExamsService.ExportData(lstData, "TUấn anh");
+            streamData.Position = 0;
+            return File(streamData.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "test.xlsx");
+        }
+        [HttpPost("excel")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Import(IFormFile formFile)
+        {
+             await _checkExamsService.ImportStudentsResultExams(formFile);
+            return Ok();
         }
         //[HttpGet("role-permission")]
         //public async Task<ServiceResponse> GetAllRole()

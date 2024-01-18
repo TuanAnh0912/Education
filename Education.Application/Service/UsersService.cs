@@ -11,6 +11,7 @@ using System.Linq;
 using System.Security;
 using System.Text;
 using System.Threading.Tasks;
+using Education.Application.Service.Base;
 
 namespace Education.Application.Service
 {
@@ -23,6 +24,9 @@ namespace Education.Application.Service
             _userRepository = serviceProvider.GetRequiredService<IUserRepository>();
             _jwtUtils = serviceProvider.GetRequiredService<IJwtUtils>();
         }
+
+        // SELECT * from system_permission sp JOIN permission p ON p.PermissionID = sp.PermissionID 
+        //JOIN user_permission up ON up.SystemPermissionName = sp.SystemPermissionName WHERE up.TotalBit & p.Bit > 0 ;
         public async override Task<ServiceResponse> Add(User entity)
         {
             if (entity == null)
@@ -55,7 +59,6 @@ namespace Education.Application.Service
                 return new ServiceResponse(true, ex.Message);
             }
         }
-        
         //public async Task<ServiceResponse> ResetPassword(string newPassword)
         //{
         //    var hashPassWord = AuthenHelpers.HashPassword(_UserName + newPassword);

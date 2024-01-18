@@ -17,6 +17,6 @@ namespace Education.Core.Interface
         Task<bool> Update(T entity);
         Task<bool> UpdateCustomColumn(T entity, List<string> columnsToUpdate, string condition, IDbTransaction transaction = null);
         string GetTableName();
-        Task<object> MultiInsert(List<BaseModel> data, IDbTransaction dbTransaction, bool selectKey);
+        Task<object> MultiInsert(List<BaseModel> data, bool selectKey,IDbTransaction dbTransaction = null);
     }
 }

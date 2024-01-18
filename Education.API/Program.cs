@@ -13,9 +13,13 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Collections.Generic;
 using Education.API.Middleware.TokenHandle;
+using Amazon.S3;
+using Education.Core.Model.AWS_S3;
+using Education.Application.Service.Base;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddAWSService<IAmazonS3>();
+builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
 // Add services to the container.
 var services = builder.Services;
 
@@ -48,6 +52,7 @@ services.AddControllers().AddJsonOptions(x =>
     x.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
 });
 services.Configure<JwtIssuerOptions>(builder.Configuration.GetSection("JwtIssuerOptions"));
+services.Configure<AwsCredentials>(builder.Configuration.GetSection("AwsCredentials"));
 
 services.Configure<DbSettings>(builder.Configuration.GetSection("DbSettings"));
 services.AddSingleton(typeof(IDbContext<>), typeof(MySQLContext<>));
@@ -59,6 +64,20 @@ services.AddTransient<IUserRepository, UserRepository>();
 services.AddTransient<IUserService, UsersService>();
 services.AddTransient<IClaimProvider, ClaimProvider>();
 services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
+services.AddTransient<IAnalysisContentService, AnalysisContentService>();
+services.AddTransient<IAnalysisHeaderService, AnalysisHeaderService>();
+services.AddTransient<IAnalysisContentRepository, AnalysisContentRepository>();
+services.AddTransient<IAnalysisHeaderRepository, AnalysisHeaderRepository>();
+services.AddTransient<IUserPermissionRepository, UserPermissionRepository>();
+services.AddTransient<IUserPermissionService, UserPermissionService>();
+services.AddTransient<ICheckExamsService, CheckExamsService>();
+services.AddTransient<IExamTestRepository, ExamTestRepository>();
+services.AddTransient<IExamTestService, ExamTestService>();
+services.AddTransient<IQuestionRepository, QuestionRepository>();
+services.AddTransient<IQuestionService, QuestionService>();
+services.AddTransient<IStudentExamsService, StudentExamsService>();
+services.AddTransient<IStudentExamsRepository, StudentExammsRepository>();
+builder.Services.AddAWSService<IAmazonS3>();
 
 
 services.AddControllers();
@@ -74,9 +93,10 @@ if (app.Environment.IsDevelopment())
 {
     // global cors policy
     app.UseCors(x => x
-        .AllowAnyOrigin()
-        .AllowAnyMethod()
-        .AllowAnyHeader());
+        .SetIsOriginAllowed(origin => true)
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials());
 
     // global error handler
     app.UseMiddleware<AuthHandleMiddleware>();

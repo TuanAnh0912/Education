@@ -5,6 +5,7 @@ using Education.Core.Model.Core;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
@@ -76,7 +77,7 @@ namespace Education.Core.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task<object> MultiInsert(List<BaseModel> data, IDbTransaction dbTransaction, bool selectKey)
+        public async Task<object> MultiInsert(List<BaseModel> data,bool selectKey,IDbTransaction dbTransaction = null)
         {
             if (data == null || !data.Any())
             {
