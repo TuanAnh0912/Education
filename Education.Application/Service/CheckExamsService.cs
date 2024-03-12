@@ -132,8 +132,9 @@ namespace Education.Application.Service
                         for (int column = 1; column <= (columnCount - 3) / 2; column++)
                         {
                             var dataQuestion = new DetailQuestion();
-                            dataQuestion.QuestionOrder = Convert.ToInt32(worksheet.Cells[1, column + 3].Value.ToString() ?? "0");
+                            dataQuestion.QuestionOrder = Convert.ToInt32(worksheet.Cells[1, column * 2 + 2].Value.ToString() ?? "0");
                             dataQuestion.Result = worksheet.Cells[row, column * 2 + 2].Value.ToString() ?? "";
+                            dataQuestion.isCorrect = (worksheet.Cells[row, column * 2 + 3].Value.ToString() == "Đúng") ? true : false;
                             detailQuestions.Add(dataQuestion);
                         }
                         dataModel.DetailQuestions = detailQuestions;
@@ -147,7 +148,10 @@ namespace Education.Application.Service
                             ExamTestCode = item.ExamTestCode,
                             StudentCode = item.StudentCode,
                             ResultJson = JsonConvert.SerializeObject(item.DetailQuestions)
-                        }) ;
+                        });
+                        var lstCorrect = item.DetailQuestions.Where(x => x.isCorrect).Select(y => y.QuestionOrder).ToList();
+                        var resDetailCorrect = await _examTestRepository.GetDetailCorrectQuestion(item.ExamTestCode, string.Join(',', lstCorrect));
+                        var dicData = resDetailCorrect.GroupBy(x=>x.MainContentCode).ToDictionary(k => k.Key, g=>g.ToList());
                     }
                     var dataCast = lstDataInsert.Cast<BaseModel>().ToList();
                     var resInserts = await _studentExamsRepository.MultiInsert(dataCast, false);

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Education.Core.Model
 {
-    [TableEducation("user")]
+    [TableEducation("")]
     public class AnalysisHeader
     {
         [Key]

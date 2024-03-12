@@ -17,5 +17,6 @@ namespace Education.Core.Model.DataModel
     {
         public int QuestionOrder { get; set; }
         public string Result { get; set; }
+        public bool isCorrect { get; set; }
     }
 }

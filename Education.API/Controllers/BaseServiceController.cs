@@ -35,8 +35,8 @@ namespace Education.API.Controllers
         [Authorize]
         public async Task<ServiceResponse> Add([FromBody] T data)
         {
-            string tableName = currentType.GetCustomAttribute<TableEducationAttribute>()?.TableName ?? "";
-            var listRole = new List<string>() { $"{tableName}.Add" };
+            string permissoinName = currentType.GetCustomAttribute<TableEducationAttribute>()?.PermissionName ?? "";
+            var listRole = new List<string>() { $"{permissoinName}.Add" };
             var checkPermisstion = await _baseService.CheckRoleAccess(listRole);
             if (checkPermisstion)
             {
@@ -85,8 +85,8 @@ namespace Education.API.Controllers
         [HttpGet("get-all")]
         public async Task<ServiceResponse> GetAll()
         {
-            string tableName = currentType.GetCustomAttribute<TableEducationAttribute>()?.TableName ?? "";
-            var listRole = new List<string>() { $"{tableName}.View" };
+            string permisstionName = currentType.GetCustomAttribute<TableEducationAttribute>()?.PermissionName ?? "";
+            var listRole = new List<string>() { $"{permisstionName}.View" };
             var checkPermisstion = await _baseService.CheckRoleAccess(listRole);
             if (checkPermisstion)
             {

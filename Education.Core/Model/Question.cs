@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Education.Core.Model
 {
     [TableEducation("question")]
-    public class Question
+    public class Question:BaseModel
     {
         [Key]
         public int QuestionID { get; set; }

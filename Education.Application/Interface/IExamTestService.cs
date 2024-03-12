@@ -1,4 +1,5 @@
 ﻿using Education.Core.Model;
+using Education.Core.Model.RequestModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,5 +10,6 @@ namespace Education.Application.Interface
 {
     public interface IExamTestService:IBaseService<ExamTest>
     {
+        Task<bool> InsertExamDetail(ExamRequestModel data);
     }
 }

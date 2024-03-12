@@ -13,6 +13,7 @@ namespace Education.Application.Service.Base
     public class BaseService<T> : IBaseService<T> where T : class
     {
         private readonly IGenericRepository<T> _genericRepository;
+        private readonly IUserPermissionRepository _rolePermisstionProvider;
         protected Guid _UserID
         {
             get
@@ -31,7 +32,7 @@ namespace Education.Application.Service.Base
         {
             _genericRepository = serviceProvider.GetRequiredService<IGenericRepository<T>>();
             _claimProvider = serviceProvider.GetRequiredService<IClaimProvider>();
-            //_rolePermisstionProvider = serviceProvider.GetRequiredService<IRolePermisstionRepository>();
+            _rolePermisstionProvider = serviceProvider.GetRequiredService<IUserPermissionRepository>();
         }
         public async virtual Task<ServiceResponse> Add(T entity)
         {
@@ -83,30 +84,21 @@ namespace Education.Application.Service.Base
             return new ServiceResponse(true, "cập nhật dữ liệu thành công");
         }
 
-        public Task<bool> CheckRoleAccess(List<string> listRole)
+        public async Task<bool> CheckRoleAccess(List<string> listRole)
         {
-            throw new NotImplementedException();
+            if (_UserID == Guid.Empty) return false;
+            var lstRolePermisstion = await _rolePermisstionProvider.GetRolePermisstionsByUserID(_UserID);
+            if (lstRolePermisstion == null || lstRolePermisstion.Count == 0) return false;
+            var dicData = lstRolePermisstion.ToDictionary(x => x.SystemPermissionName, k => k.Roles);
+            foreach (var item in listRole)
+            {
+                var dataRole = item.Split('.');
+                if (dicData.ContainsKey(dataRole[0]) && dicData[dataRole[0]].Contains(dataRole[1]))
+                {
+                    return true;
+                }    
+            }
+            return false;
         }
-
-        //public async Task<bool> CheckRoleAccess(List<string> listRole)
-        //{
-        //    if (_UserID == Guid.Empty) return false;
-        //    var lstRolePermisstion = await _rolePermisstionProvider.GetRolePermisstionsByUserID(_UserID.ToString());
-        //    if (lstRolePermisstion == null || lstRolePermisstion.Count == 0) return false;
-        //    var lstRoleOwner = lstRolePermisstion.Select(x => x.PermisstionName);
-        //    var countPermisstion = 0;
-        //    foreach (var item in listRole)
-        //    {
-        //        if (lstRoleOwner.Contains(item))
-        //        {
-        //            countPermisstion++;
-        //            if (countPermisstion == listRole.Count)
-        //            {
-        //                return true;
-        //            }
-        //        }
-        //    }
-        //    return false;
-        //}
     }
 }

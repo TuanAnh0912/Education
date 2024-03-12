@@ -17,7 +17,7 @@ namespace Education.API.Controllers
         [HttpPost("login")]
         public async Task<ServiceResponse> CheckLogin([FromBody] LoginRequest data)
         {
-            var rsLogin = await _authenService.LoginAsync(data.Username, data.password);
+            var rsLogin = await _authenService.LoginAsync(data.Username, data.Password);
             if (!rsLogin.Success)
             {
                 return new ServiceResponse(rsLogin.Success, rsLogin.Message ?? "");

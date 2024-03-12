@@ -10,10 +10,17 @@ namespace Education.Core.Model.Core
     public class TableEducationAttribute: Attribute
     {
         public string TableName { get; }
+        public string PermissionName { get; }
 
+        public TableEducationAttribute(string tableName, string permissionName)
+        {
+            TableName = tableName;
+            PermissionName = permissionName;    
+        }
         public TableEducationAttribute(string tableName)
         {
             TableName = tableName;
+            PermissionName = "";
         }
     }
 }

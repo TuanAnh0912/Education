@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace Education.Core.Model
 {
-    [TableEducation("exam_test")]
-    public class ExamTest
+    [TableEducation("exam_test","Exam")]
+    public class ExamTest:BaseModel
     {
         [Key]
         public int ExamTestID { get; set; }

@@ -34,7 +34,7 @@ namespace Education.Application.Service
             var tokenRender = new JwtSecurityToken(
             issuer: _jwtIssuerOptions.Issuer,
              audience: _jwtIssuerOptions.Audience,
-             expires: DateTime.UtcNow.Add(_jwtIssuerOptions.TokenExpiresAfter),
+             expires: DateTime.Now.AddMinutes(Convert.ToDouble(_jwtIssuerOptions.TokenExpiresAfter)),
              claims: claims,
              signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256));
 

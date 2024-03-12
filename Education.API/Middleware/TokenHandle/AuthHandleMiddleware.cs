@@ -38,7 +38,7 @@ namespace Education.API.Middleware.TokenHandle
                 var authenToken = context.Request.Headers["Authorization"];
                 if (!string.IsNullOrEmpty(authenToken))
                 {
-                    authenToken = authenToken.ToString().Split(" ")[1];
+                   // authenToken = authenToken.ToString().Split(" ")[1];
                     var handleToken = new JwtSecurityTokenHandler();
                     var jsonToken = handleToken.ReadJwtToken(authenToken);
                     if (jsonToken != null)

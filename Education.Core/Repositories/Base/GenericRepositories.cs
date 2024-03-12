@@ -24,6 +24,7 @@ namespace Education.Core.Repositories
 
         public async virtual Task<object> Add(T entity)
         {
+            var baseModel = (BaseModel)Activator.CreateInstance(typeof(T));
             TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
             var param = new Dictionary<string, object>();
             Type typeOfModel = typeof(T);
@@ -33,7 +34,8 @@ namespace Education.Core.Repositories
                 string propertyName = property.Name;
                 param.Add($"v_{propertyName}", property.GetValue(entity, null) ?? "");
             }
-            var nameStore = $"Proc_Insert{textInfo.ToTitleCase(GetTableName())}";
+            //var nameStore = $"Proc_Insert{textInfo.ToTitleCase(GetTableName())}";
+            var nameStore = $"Proc_Insert_{baseModel.GetTableName()}";
             var resUpdate = await _dbContext.ExcuseUsingStore(param, nameStore);
             return resUpdate > 0;
         }
@@ -50,9 +52,20 @@ namespace Education.Core.Repositories
             }
         }
 
-        public virtual Task<IEnumerable<T>> GetAll()
+        public async virtual Task<IEnumerable<T>> GetAll()
         {
-            throw new NotImplementedException();
+            var baseModel = (BaseModel)Activator.CreateInstance(typeof(T));
+            using (var connection = _dbContext.CreateConnection())
+            {
+                connection.Open();
+                var query = $"SELECT * FROM {baseModel.GetTableName() ?? GetTableName()}";
+                var rs = await connection.QueryAsync<T>(query, null);
+                if (rs.Any())
+                {
+                    return rs.ToList();
+                }
+                return null;
+            }
         }
 
         public async virtual Task<T> GetById(object ID)
