@@ -114,13 +114,14 @@ namespace Education.Core.Repositories
             var sql = new StringBuilder();
             var tableName = data[0].GetTableName();
             var columnKey = data[0].GetPrimaryKey();
+            Type columnKeyType = data[0].GetTypeOfPriamry();
             var columns = new List<string>();
             var columnsInTable = this.GetColumnByTableName(tableName).Result;
             int count = 0;
             bool isFirst = true;
             foreach (var column in columnsInTable)
             {
-                if (data[0].ContainProperty(column) && column != columnKey)
+                if (data[0].ContainProperty(column) && (column != columnKey || columnKeyType != typeof(int)))
                 {
                     columns.Add(column);
                 }

@@ -29,6 +29,21 @@ namespace Education.API.Controllers
             res.Success = await _examTestService.InsertExamDetail(data);
             return res;
         }
+        [HttpGet("shuff-exams")]
+        public async Task<ServiceResponse> ShuffleExam([FromQuery]string examCode)
+        {
+            var res = new ServiceResponse();
+            res.Data = await _examTestService.ShuffleExam(examCode);
+            return res;
+        }
+        [HttpGet("all-shuff-exams")]
+        public async Task<ServiceResponse> GetAllShuffleExam([FromQuery] int examID)
+        {
+            var res = new ServiceResponse();
+            res.Data = await _examTestService.GetShuffleExam(examID);
+            return res;
+        }
+        //public async Task<ServiceResponse> Get
     }
 
 }

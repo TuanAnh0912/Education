@@ -11,5 +11,7 @@ namespace Education.Application.Interface
     public interface IExamTestService:IBaseService<ExamTest>
     {
         Task<bool> InsertExamDetail(ExamRequestModel data);
+        Task<bool> ShuffleExam(string examTestCode);
+        Task<List<ExamRequestModel>> GetShuffleExam(int examID);
     }
 }

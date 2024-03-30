@@ -14,5 +14,7 @@ namespace Education.Core.Interface
         Task<List<ExamsDetailDto>> GetExamsdetailByExamCodes(List<string> examCodes);
         Task<List<CorrectQuestionDto>> GetDetailCorrectQuestion(string examCode, string lstCorrectQuestion);
         Task<bool> InsertExamDetail(ExamRequestModel data);
+        Task<bool> InsertShuffleExam(List<RuleSortExamQuestion> ruleSortExamQuestions, List<RuleSortQuestionAnswer> ruleSortQuestionAnswers);
+        Task<List<ShuffleExamDto>> GetShuffleExam(int ExamTestID);
     }
 }

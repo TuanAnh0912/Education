@@ -23,6 +23,10 @@ namespace Education.Core.Model.Core
         {
             return this.GetType().GetProperties().Where(p => Attribute.IsDefined(p, typeof(KeyAttribute)))?.FirstOrDefault()?.Name ?? "";
         }
+        public Type GetTypeOfPriamry()
+        {
+            return this.GetType().GetProperties().Where(p => Attribute.IsDefined(p, typeof(KeyAttribute)))?.FirstOrDefault()?.PropertyType;
+        }
         public bool ContainProperty(string property)
         {
             return this.GetType().GetProperty(property) != null;

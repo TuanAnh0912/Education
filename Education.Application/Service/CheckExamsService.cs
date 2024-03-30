@@ -71,7 +71,7 @@ namespace Education.Application.Service
                 {
                     workSheet.Cells[i + 3, (j * 2) + 4].Value = "A";
                     workSheet.Cells[i + 3, (j * 2) + 4].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                    workSheet.Cells[i + 3, (j * 2) + 5].Value = examsOfStudent[i].Result == "A" ? "Đúng" : "Sai";
+                    workSheet.Cells[i + 3, (j * 2) + 5].Value = examsOfStudent[i].IsTrue ? "Đúng" : "Sai";
                     workSheet.Cells[i + 3, (j * 2) + 5].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 }
             }

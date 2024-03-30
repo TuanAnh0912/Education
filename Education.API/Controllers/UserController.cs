@@ -27,8 +27,14 @@ namespace Education.API.Controllers
         }
         [HttpPost("create-user")]
         [AllowAnonymous]
-        public async Task<ServiceResponse> CreateUser([FromBody] User user)
+        public async Task<ServiceResponse> CreateUser([FromBody] UserRequestModel data)
         {
+            var user = new User()
+            {
+                UserName = data.UserName,
+                Password = data.Password,
+                FullName = data.FullName
+            };
             return await _userService.Add(user);
         }
         [HttpGet("excel")]

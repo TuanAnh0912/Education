@@ -12,11 +12,13 @@ namespace Education.Core.Model
     public class Question:BaseModel
     {
         [Key]
-        public int QuestionID { get; set; }
+        public Guid QuestionID { get; set; }
         public int ExamTestID { get; set; }
-        public int SortOrder { get; set; }
-        public string Result { get; set; }
+        public int QuestionSortOrder { get; set; }
+        public bool IsTrue { get; set; }
         public int SubAnalysysID { get; set; }
         public int MainAnalysysID { get; set; }
+        public string Image { get; set; }
+        public string QuestionContent { get; set; }
     }
 }
