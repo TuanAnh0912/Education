@@ -43,6 +43,22 @@ namespace Education.API.Controllers
             res.Data = await _examTestService.GetShuffleExam(examID);
             return res;
         }
+        [HttpGet("exam-bycode")]
+        public async Task<ServiceResponse> GetExamByCode([FromQuery] string examCode)
+        {
+            var res = new ServiceResponse();
+
+            try
+            {
+                res.Data = await _examTestService.GetExamsByCode(examCode);
+                res.Success = true;
+            }
+            catch 
+            {
+                res.Success = false;
+            }
+            return res;
+        }
         //public async Task<ServiceResponse> Get
     }
 

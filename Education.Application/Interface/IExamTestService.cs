@@ -13,5 +13,6 @@ namespace Education.Application.Interface
         Task<bool> InsertExamDetail(ExamRequestModel data);
         Task<bool> ShuffleExam(string examTestCode);
         Task<List<ExamRequestModel>> GetShuffleExam(int examID);
+        Task<ExamRequestModel> GetExamsByCode(string examCode);
     }
 }

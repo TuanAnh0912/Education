@@ -17,5 +17,6 @@ namespace Education.Core.Model.DataModel
         public int AnswerID { get; set; }
         public int AnswerSortOrder { get; set; }
         public string AnswerContent { get; set; }
+        public string QuestionContent { get; set; }
     }
 }
