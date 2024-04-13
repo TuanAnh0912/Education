@@ -1,4 +1,5 @@
 ﻿using Education.Core.Model;
+using Education.Core.Model.Core;
 using Education.Core.Model.RequestModel;
 using System;
 using System.Collections.Generic;
@@ -14,5 +15,6 @@ namespace Education.Application.Interface
         Task<bool> ShuffleExam(string examTestCode);
         Task<List<ExamRequestModel>> GetShuffleExam(int examID);
         Task<ExamRequestModel> GetExamsByCode(string examCode);
+        Task<ServiceResponse> Getpaging(PagingRequestModel data);
     }
 }

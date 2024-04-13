@@ -29,6 +29,12 @@ namespace Education.API.Controllers
             res.Success = await _examTestService.InsertExamDetail(data);
             return res;
         }
+        [HttpPost("paging")]
+        public async Task<ServiceResponse> GetPaging(PagingRequestModel data)
+        {
+            var res  = await _examTestService.Getpaging(data);
+            return res;
+        }
         [HttpGet("shuff-exams")]
         public async Task<ServiceResponse> ShuffleExam([FromQuery]string examCode)
         {

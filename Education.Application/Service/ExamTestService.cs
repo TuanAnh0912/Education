@@ -2,6 +2,7 @@
 using Education.Application.Service.Base;
 using Education.Core.Interface;
 using Education.Core.Model;
+using Education.Core.Model.Core;
 using Education.Core.Model.RequestModel;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
@@ -157,6 +158,14 @@ namespace Education.Application.Service
             }
             var dbtran = await  _examTestRepository.InsertShuffleExam(newShuffleQuestion, newShuffleAnswer);
             return true;
+        }
+        public async Task<ServiceResponse> Getpaging(PagingRequestModel data)
+        {
+            var resData = await _examTestRepository.GetPaging(data.PageSize, data.PageIndex, data.ValueWhere);
+            var res = new ServiceResponse();
+            res.Data = resData;
+            res.Success = true;
+            return res;
         }
         public async Task<List<ExamRequestModel>> GetShuffleExam(int examID)
         {

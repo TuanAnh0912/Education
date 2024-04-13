@@ -4,10 +4,12 @@ using Education.Core.Model;
 using Education.Core.Model.Core;
 using Education.Core.Model.DataModel;
 using Education.Core.Model.RequestModel;
+using Education.Core.Model.ResponseModel;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -125,6 +127,28 @@ namespace Education.Core.Repositories
             };
             var res = await _dbContext.QueryUsingStore<ShuffleExamDto>(param, sql, commandType: System.Data.CommandType.Text);
             return res.ToList();
+        }
+        public async Task<PagingResponse> GetPaging(int pageSize,int pageIndex,string stringWhere = "")
+        {
+            var dataPaging = new PagingResponse();
+            var offSet = (pageIndex - 1) * pageSize;
+            var sqlData = " Select * from exam_test where (ExamTestCode like @stringWhere or Subject like @stringWhere) ORDER BY CreatedDate limit @pageSize offset @offSet;";
+            var param = new Dictionary<string, object>()
+            {
+               {"@stringWhere",$"%{stringWhere}%" },
+                {"@pageSize",pageSize },
+                {"@offSet",offSet },
+            };
+            var res = await _dbContext.QueryUsingStore<ExamTest>(param, sqlData, commandType: CommandType.Text);
+            dataPaging.PageData = res.ToList();
+            var sqlTotal = " Select count(1)  as Total from exam_test where (ExamTestCode like @stringWhere or Subject like @stringWhere);";
+            var param2 = new Dictionary<string, object>()
+            {
+                {"@stringWhere",$"%{stringWhere}%" },
+            };
+            var resTotal = await _dbContext.QueryUsingStore<int>(param2, sqlTotal, commandType: CommandType.Text);
+            dataPaging.PageSize = resTotal.FirstOrDefault();
+            return dataPaging;
         }
     }
 }
