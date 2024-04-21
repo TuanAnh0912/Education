@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Education.Application.Service
 {
-    public class UserPermissionService : BaseService<UserPermission>, IUserPermissionService
+    public class UserPermissionService : BaseService<RolePermission>, IUserPermissionService
     {
         private IUserPermissionRepository _userPermissionRepository;
         public UserPermissionService(IServiceProvider serviceProvider) : base(serviceProvider)

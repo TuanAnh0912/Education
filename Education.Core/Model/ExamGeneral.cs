@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace Education.Core.Model
 {
-    [TableEducation("user_permission")]
-    public class UserPermission
+    [TableEducation("exam_general")]
+    public class ExamGeneral:BaseModel
     {
         [Key]
-        public int UserPermissionID { get; set; }
-        public Guid UserID { get; set; }
-        public int TotalBit { get; set; }
+        public int ExamGeneralID { get; set; }
+        public string Name { get; set; }
+        public int BlockID { get; set; }
     }
 }

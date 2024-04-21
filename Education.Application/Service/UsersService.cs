@@ -18,10 +18,12 @@ namespace Education.Application.Service
     public class UsersService : BaseService<User>, IUserService
     {
         private readonly IUserRepository _userRepository;
+        private readonly IRoleUserRepository _roleUserRepository;
         private readonly IJwtUtils _jwtUtils;
         public UsersService(IServiceProvider serviceProvider) : base(serviceProvider)
         {
             _userRepository = serviceProvider.GetRequiredService<IUserRepository>();
+            _roleUserRepository = serviceProvider.GetRequiredService<IRoleUserRepository>();
             _jwtUtils = serviceProvider.GetRequiredService<IJwtUtils>();
         }
 
@@ -33,7 +35,8 @@ namespace Education.Application.Service
             {
                 return new ServiceResponse(false, "Dữ liệu trống");
             }
-           // var validateUser = ValidateUser(entity);
+            entity.UserID = Guid.NewGuid();
+            // var validateUser = ValidateUser(entity);
             var checkExitsUser = await _userRepository.CheckByUserNameAndEmail(entity.UserName ?? "");
             if (checkExitsUser == null)
             {
@@ -41,7 +44,17 @@ namespace Education.Application.Service
                 var rsInsert = await _userRepository.Add(entity);
                 if (Convert.ToInt32(rsInsert) > 0)
                 {
-                    return new ServiceResponse(true, "Tạo thành công");
+                    var roleModel = new RoleUser()
+                    {
+                        RoleID = 2,
+                        UserID = entity.UserID,
+                    };
+                    var resRole = await _roleUserRepository.Add(roleModel);
+                    if (Convert.ToInt32(resRole) > 0)
+                    {
+                        return new ServiceResponse(true, "Tạo thành công");
+                    }
+                    return new ServiceResponse(false, "Có lỗi xảy ra");
                 }
             }
             return new ServiceResponse(false, "Tài khoản đã tồn tại");

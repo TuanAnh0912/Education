@@ -19,22 +19,13 @@ namespace Education.Core.Repositories
         {
             var param2 = new Dictionary<string, object>
             {
-                {"v_UserID", Guid.NewGuid()},
+                {"v_UserID", entity.UserID},
                 {"v_UserName", entity.UserName ?? ""},
                 {"v_HashPassword",entity.HashPassword ?? ""},
             };
             using (var db = _dbContext.GetDbTransaction())
             {
                 var transaction = _dbContext.GetDbTransaction();
-                //var sql = "select * from Role;";
-                //var allRoles = await _dbContext.QueryUsingStore<RolePermisstion>(null, sql, transaction, CommandType.Text);
-                //if (!allRoles.Any())
-                //{
-                //    transaction.Rollback();
-                //    return 0;
-                //}
-                //var userRole = allRoles.Where(x => x.RoleName == "USER").FirstOrDefault();
-                //param2.Add("v_RoleID", userRole?.RoleID ?? 0);
                 var rsInsert = await _dbContext.ExcuseUsingStore(param2, "Proc_InsertUser", transaction);
                 if (rsInsert > 0)
                 {

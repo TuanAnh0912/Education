@@ -77,6 +77,11 @@ services.AddTransient<IQuestionRepository, QuestionRepository>();
 services.AddTransient<IQuestionService, QuestionService>();
 services.AddTransient<IStudentExamsService, StudentExamsService>();
 services.AddTransient<IStudentExamsRepository, StudentExammsRepository>();
+services.AddTransient<IRoleUserRepository, RoleUserRepository>();
+services.AddTransient<IExamGeneralRepository, ExamGeneralRepository>();
+services.AddTransient<IBlockRepository, BlockRepository>();
+services.AddTransient<IExamGeneralService, ExamGeneralService>();
+services.AddTransient<IBlockService, BlockService>();
 builder.Services.AddAWSService<IAmazonS3>();
 
 

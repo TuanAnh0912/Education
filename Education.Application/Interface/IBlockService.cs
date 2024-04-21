@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 
 namespace Education.Application.Interface
 {
-    public interface IUserPermissionService:IBaseService<RolePermission>
+    public interface IBlockService:IBaseService<Block>
     {
-        Task<bool> CheckRoleAccess(string system, string role);
     }
 }

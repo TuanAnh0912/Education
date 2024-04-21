@@ -11,14 +11,14 @@ using System.Threading.Tasks;
 
 namespace Education.Core.Repositories
 {
-    public class UserPermissionRepository : GenericRepositories<UserPermission>, IUserPermissionRepository
+    public class UserPermissionRepository : GenericRepositories<RolePermission>, IUserPermissionRepository
     {
-        public UserPermissionRepository(IDbContext<UserPermission> dbContext) : base(dbContext)
+        public UserPermissionRepository(IDbContext<RolePermission> dbContext) : base(dbContext)
         {
         }
         public async Task<List<UserRolesDto>> GetRolePermisstionsByUserID(Guid userID)
         {
-            var sql = "SELECT sp.SystemPermissionName,GROUP_CONCAT(p.PermisstionCode) as Roles from system_permission sp JOIN permission p ON p.PermissionID = sp.PermissionID JOIN user_permission up ON up.SystemPermissionName = sp.SystemPermissionName WHERE (up.TotalBit & p.Bit > 0) AND up.UserID = @UserID GROUP by sp.SystemPermissionName";
+            var sql = "SELECT sp.SystemPermissionName,GROUP_CONCAT(DISTINCT p.PermisstionCode) as Roles FROM role_user ru JOIN role_permission rp ON ru.RoleID = rp.RoleID JOIN system_permission sp ON rp.SystemPermissionName = sp.SystemPermissionName JOIN permission p ON p.PermissionID = sp.PermissionID WHERE (rp.TotalBit & p.Bit > 0) AND ru.UserID = @UserID GROUP BY rp.SystemPermissionName;";
             var param = new Dictionary<string, object>()
             {
                 {"@UserID",userID}
