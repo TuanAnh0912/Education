@@ -16,5 +16,6 @@ namespace Education.Application.Interface
         Task<List<ExamRequestModel>> GetShuffleExam(int examID);
         Task<ExamRequestModel> GetExamsByCode(string examCode);
         Task<ServiceResponse> Getpaging(PagingRequestModel data);
+        Task<ServiceResponse> InsertUserExam(List<UserExam> data);
     }
 }

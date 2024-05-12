@@ -150,5 +150,15 @@ namespace Education.Core.Repositories
             dataPaging.PageSize = resTotal.FirstOrDefault();
             return dataPaging;
         }
+        public async Task<List<ExamTest>> GetExamTestsByBlockID(int BlockID)
+        {
+            var sql = $"select etg.ExamTestID,req.ExamCode as ExamTestCode from exam_general eg JOIN exam_test_general etg on eg.ExamGeneralID = etg.ExamGeneralID JOIN rulesort_exam_question req on req.ExamTestID = etg.ExamTestID WHERE eg.BlockID = @blockID GROUP by  etg.ExamTestID,req.ExamCode ;";
+            var param = new Dictionary<string, object>()
+            {
+                {"@blockID",BlockID }
+            };
+            var res = await _dbContext.QueryUsingStore(param,sql, commandType: CommandType.Text);
+            return res.ToList();
+        }
     }
 }

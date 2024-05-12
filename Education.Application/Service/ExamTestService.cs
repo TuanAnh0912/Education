@@ -4,6 +4,7 @@ using Education.Core.Interface;
 using Education.Core.Model;
 using Education.Core.Model.Core;
 using Education.Core.Model.RequestModel;
+using Education.Core.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Org.BouncyCastle.Utilities.Collections;
@@ -213,6 +214,14 @@ namespace Education.Application.Service
                 list[n] = value;
             }
             return list;
+        }
+        public async Task<ServiceResponse> InsertUserExam(List<UserExam> data)
+        {
+            var res = new ServiceResponse();
+            var lstUserExam = data.Cast<BaseModel>().ToList();
+            var resInsert = await _examTestRepository.MultiInsert(lstUserExam, false);
+            res.Success = Convert.ToBoolean(resInsert);
+            return res;
         }
     }
 }

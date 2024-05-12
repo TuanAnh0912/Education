@@ -14,7 +14,6 @@ namespace Education.API.Controllers
 
     [ApiController]
     [Route("[controller]")]
-    [Authorize]
     public class UserController : BaseServiceController<User>
     {
         readonly IUserService _userService;
@@ -23,7 +22,7 @@ namespace Education.API.Controllers
         {
             _userService = serviceProvider.GetRequiredService<IUserService>();
             _checkExamsService = serviceProvider.GetRequiredService<ICheckExamsService>();
-            this.currentType = typeof(License);
+            this.currentType = typeof(User);
         }
         [HttpPost("create-user")]
         [AllowAnonymous]
@@ -68,6 +67,13 @@ namespace Education.API.Controllers
         {
              await _checkExamsService.ImportStudentsResultExams(formFile);
             return Ok();
+        }
+        [HttpPost("users-block")]
+        [AllowAnonymous]
+        public async Task<IActionResult> UserBlock(UserBlockRequestModel data)
+        {
+            var res = await _userService.InsertUserExam(data);
+            return Ok(res);
         }
         //[HttpGet("role-permission")]
         //public async Task<ServiceResponse> GetAllRole()

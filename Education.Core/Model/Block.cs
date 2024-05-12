@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Education.Core.Model
 {
-    [TableEducation("Block")]
+    [TableEducation("Block", "Exam")]
     public class Block:BaseModel
     {
         [Key]

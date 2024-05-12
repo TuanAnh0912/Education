@@ -1,5 +1,6 @@
 ﻿using Education.Core.Model;
 using Education.Core.Model.Core;
+using Education.Core.Model.RequestModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace Education.Application.Interface
 {
     public interface IUserService:IBaseService<User>
     {
+        Task<ServiceResponse> InsertUserExam(UserBlockRequestModel data);
         //Task<ServiceResponse> GetAllRole();
         // Task<ServiceResponse> InsertRolePermisstion(RolePermisstionRequestModel model);
         // Task<ServiceResponse> SendMail();

@@ -65,7 +65,11 @@ namespace Education.API.Controllers
             }
             return res;
         }
-        //public async Task<ServiceResponse> Get
+        [HttpPost("list-user-exam")]
+        public async Task<ServiceResponse> InsertUserExam(List<UserExam> data)
+        {
+            return await _examTestService.InsertUserExam(data);
+        }
     }
 
 }

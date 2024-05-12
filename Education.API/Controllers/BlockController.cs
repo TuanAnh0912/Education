@@ -14,7 +14,7 @@ namespace Education.API.Controllers
 
     [ApiController]
     [Route("[controller]")]
-    [Authorize]
+    //[Authorize]
     public class BlockController : BaseServiceController<Block>
     {
         public BlockController(IBlockService baseService, IServiceProvider serviceProvider) : base(baseService)

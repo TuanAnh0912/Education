@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace Education.Core.Model
 {
-    [TableEducation("user")]
-    public class User
+    [TableEducation("user","User")]
+    public class User:BaseModel
     {
         [Key]
         public Guid UserID { get; set; }

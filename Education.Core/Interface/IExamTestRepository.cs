@@ -18,5 +18,6 @@ namespace Education.Core.Interface
         Task<bool> InsertShuffleExam(List<RuleSortExamQuestion> ruleSortExamQuestions, List<RuleSortQuestionAnswer> ruleSortQuestionAnswers);
         Task<List<ShuffleExamDto>> GetShuffleExam(int ExamTestID);
         Task<PagingResponse> GetPaging(int pageSize, int pageIndex, string stringWhere = "");
+        Task<List<ExamTest>> GetExamTestsByBlockID(int BlockID);
     }
 }

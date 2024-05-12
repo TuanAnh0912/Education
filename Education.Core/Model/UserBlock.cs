@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Education.Core.Model
 {
-    [TableEducation("user_block")]
+    [TableEducation("user_block","Exam")]
     public class UserBlock:BaseModel
     {
         public int UserBlockID { get; set; }

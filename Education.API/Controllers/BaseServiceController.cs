@@ -32,7 +32,7 @@ namespace Education.API.Controllers
             _baseService = baseService;
         }
         [HttpPost("add")]
-        [Authorize]
+        //[Authorize]
         public async Task<ServiceResponse> Add([FromBody] T data)
         {
             string permissoinName = currentType.GetCustomAttribute<TableEducationAttribute>()?.PermissionName ?? "";

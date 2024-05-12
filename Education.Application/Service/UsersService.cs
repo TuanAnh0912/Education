@@ -19,11 +19,13 @@ namespace Education.Application.Service
     {
         private readonly IUserRepository _userRepository;
         private readonly IRoleUserRepository _roleUserRepository;
+        private readonly IExamTestRepository _examTestRepository;
         private readonly IJwtUtils _jwtUtils;
         public UsersService(IServiceProvider serviceProvider) : base(serviceProvider)
         {
             _userRepository = serviceProvider.GetRequiredService<IUserRepository>();
             _roleUserRepository = serviceProvider.GetRequiredService<IRoleUserRepository>();
+            _examTestRepository = serviceProvider.GetRequiredService<IExamTestRepository>();
             _jwtUtils = serviceProvider.GetRequiredService<IJwtUtils>();
         }
 
@@ -71,6 +73,35 @@ namespace Education.Application.Service
             {
                 return new ServiceResponse(true, ex.Message);
             }
+        }
+        public async Task<ServiceResponse> InsertUserExam(UserBlockRequestModel data)
+        {
+            var lstExamBlock = await _examTestRepository.GetExamTestsByBlockID(data.BlockID);
+            var dicData = lstExamBlock.GroupBy(x => x.ExamTestID).ToDictionary(k => k.Key, g => g.ToList());
+            var lstUserExam = new List<UserExam>();
+            var lstUserBlock = new List<UserBlock>();
+            foreach (var item in data.LstUser)
+            {
+                lstUserBlock.Add(new UserBlock() { UserID = item, BlockID = data.BlockID });
+            }
+            var dataInsertUserBlock = lstUserBlock.Cast<BaseModel>().ToList();
+            _ = await _userRepository.MultiInsert(dataInsertUserBlock, false);
+            Random rnd = new Random();
+            foreach (var item in dicData)
+            {
+                var lengh = item.Value.Count();
+                var index = rnd.Next(1,lengh) - 1;
+                foreach (var userID in data.LstUser)
+                {
+                    lstUserExam.Add(new UserExam() { UserID = userID, ExamCode = item.Value[index].ExamTestCode });
+                }
+            }
+            var lstUserExamInsert = lstUserExam.Cast<BaseModel>().ToList();
+            _ = await _userRepository.MultiInsert(lstUserExamInsert, false);
+            return new ServiceResponse()
+            {
+                Success = true,
+            };
         }
         //public async Task<ServiceResponse> ResetPassword(string newPassword)
         //{
