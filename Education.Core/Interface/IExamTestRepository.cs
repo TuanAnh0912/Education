@@ -19,5 +19,8 @@ namespace Education.Core.Interface
         Task<List<ShuffleExamDto>> GetShuffleExam(int ExamTestID);
         Task<PagingResponse> GetPaging(int pageSize, int pageIndex, string stringWhere = "");
         Task<List<ExamTest>> GetExamTestsByBlockID(int BlockID);
+        Task<List<ExamResultDto>> GetResultByExamCode(string examCode);
+        Task<bool> UpdateUserExam(UserExam dataUpdate);
+        Task<List<DataExamDoingDto>> GetDataExamDoing(string examCode);
     }
 }

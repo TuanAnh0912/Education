@@ -3,7 +3,9 @@ using Education.Application.Service.Base;
 using Education.Core.Interface;
 using Education.Core.Model;
 using Education.Core.Model.Core;
+using Education.Core.Model.DataModel;
 using Education.Core.Model.RequestModel;
+using Education.Core.Model.ResponseModel;
 using Education.Core.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
@@ -76,7 +78,7 @@ namespace Education.Application.Service
                 }
                 originExam.QuestionAnswers.Add(lstQuestion);
             }
-            var resInsert =  await InsertShuffleRule(originExam);
+            var resInsert = await InsertShuffleRule(originExam);
             return resInsert;
         }
         /// <summary>
@@ -154,10 +156,10 @@ namespace Education.Application.Service
                             ExamCode = shuffleCode
                         });
                     }
-                   
+
                 }
             }
-            var dbtran = await  _examTestRepository.InsertShuffleExam(newShuffleQuestion, newShuffleAnswer);
+            var dbtran = await _examTestRepository.InsertShuffleExam(newShuffleQuestion, newShuffleAnswer);
             return true;
         }
         public async Task<ServiceResponse> Getpaging(PagingRequestModel data)
@@ -222,6 +224,151 @@ namespace Education.Application.Service
             var resInsert = await _examTestRepository.MultiInsert(lstUserExam, false);
             res.Success = Convert.ToBoolean(resInsert);
             return res;
+        }
+        public async Task<ServiceResponse> GetResultExam(MarkTestRequestModel data)
+        {
+            var resultExamByCode = await _examTestRepository.GetResultByExamCode(data.ExamCode);
+            var point = 0;
+            var lstAnalysis = new List<AnalysisQuestionDto>();
+            var dataRsByCodeDic = resultExamByCode.GroupBy(x => x.QuestionOrder).ToDictionary(k => k.Key, g => g.ToList());
+            var i = 0;
+            foreach (var item in dataRsByCodeDic)
+            {
+                var dataModel = data.QuestionDetails[i];
+                if (dataModel.Results.Any())
+                {
+                    var isCorrect = dataModel.Results.All(item.Value.Select(k => k.OrderAnswer).OrderBy(x => x).Contains);
+                    if (isCorrect)
+                    {
+                        point += (10 / dataRsByCodeDic.Count);
+                        lstAnalysis.Add(new AnalysisQuestionDto()
+                        {
+                            MainAnalysCode = dataModel.MainAnalysCode,
+                            MainAnalysName = dataModel.MainAnalysName,
+                            SubAnalysCode = dataModel.SubAnalysCode,
+                            SubAnalysPoint = dataModel.SubAnalysPoint
+                        });
+                    }
+                }
+                i++;
+            }
+            var dicDataAnalys = lstAnalysis.GroupBy(x => x.MainAnalysCode).ToDictionary(k => k.Key, g => g.ToList());
+            var dicCalculateAnalys = new Dictionary<string, object>();
+            var comment = new StringBuilder("");
+            double totalPoin = 0;
+            foreach (var itemAnalys in dicDataAnalys)
+            {
+                double poinSub = 0;
+                var nameMainAnalys = itemAnalys.Value.FirstOrDefault()?.MainAnalysName ?? "";
+                foreach (var itemSubAnalys in itemAnalys.Value)
+                {
+                    poinSub += itemSubAnalys.SubAnalysPoint;
+                }
+                totalPoin += poinSub;
+                if (itemAnalys.Key == "N1")
+                {
+                    if (poinSub < 3)
+                    {
+                        comment.AppendLine($"Bạn cần bổ sung kiến thức và tính toán kỹ lưỡng hơn {nameMainAnalys}");
+                    }
+                    else if (poinSub >= 3 && poinSub < 5)
+                    {
+                        comment.AppendLine($"Bạn áp dụng tốt kiến thức vào bài kiểm tra {nameMainAnalys}");
+                    }
+                    else
+                    {
+                        comment.AppendLine($"Bạn hoàn thành xuất sắc {nameMainAnalys}");
+                    }
+                }
+                else if (itemAnalys.Key == "N2")
+                {
+                    if (poinSub < 3.5)
+                    {
+                        comment.AppendLine($"Bạn cần bổ sung kiến thức và tính toán kỹ lưỡng hơn  {nameMainAnalys}");
+                    }
+                    else if (poinSub >= 3.5 && poinSub < 4)
+                    {
+                        comment.AppendLine($"Bạn áp dụng tốt kiến thức vào bài kiểm tra, {nameMainAnalys}");
+                    }
+                    else
+                    {
+                        comment.AppendLine($"Bạn hoàn thành xuất sắc {nameMainAnalys}");
+                    }
+                }
+                else if (itemAnalys.Key == "N3")
+                {
+                    if (poinSub < 2)
+                    {
+                        comment.AppendLine($"Bạn cần bổ sung kiến thức và tính toán kỹ lưỡng hơn {nameMainAnalys}");
+                    }
+                    else if (poinSub >= 2 && poinSub < 6)
+                    {
+                        comment.AppendLine($"Bạn áp dụng tốt kiến thức vào bài kiểm tra {nameMainAnalys}");
+                    }
+                    else
+                    {
+                        comment.AppendLine($"Bạn hoàn thành xuất sắc {nameMainAnalys}");
+                    }
+                }
+            }
+            if (totalPoin < 13.5)
+            {
+                comment.AppendLine($"Bạn đạt kết quả kém trong bài kiểm tra lần này, bạn cần nỗ lực bổ sung kiến thức để bài kiểm tra tới đạt kết quả tốt.");
+            }
+            else if (totalPoin >= 13.5 && totalPoin < 16)
+            {
+                comment.AppendLine("Bạn đã áp dụng tốt những kiến thức trên lớp học vào bài kiểm tra, cần tiếp tục nỗ lực cho bài kiểm tra tiếp theo.");
+            }
+            else
+            {
+                comment.AppendLine("Hoàn thành bài Kiểm tra đạt kết quả tốt, tiếp tục phấn đấu");
+            }
+            var dataUpdate = new UserExam()
+            {
+                ResultJson = comment.ToString(),
+                Point = point,
+                UserID = data.UserID,
+                ExamCode = data.ExamCode,
+                IsTest = true
+            } 
+            ;
+            var resInsert = await _examTestRepository.UpdateUserExam(dataUpdate);
+            return new ServiceResponse();
+        }
+        public async Task<ServiceResponse> GetDataExamDoingDetail(string examCode)
+        {
+            var resData = await _examTestRepository.GetDataExamDoing(examCode);
+            var dicData = resData.GroupBy(x => x.OriginQuestionID).ToDictionary(k => k.Key, g => g.ToList());
+            var data = new List<ExamDoingResponse>();
+            foreach (var item in dicData)
+            {
+                var dataModel = new ExamDoingResponse();
+                var dataQuestion = item.Value.FirstOrDefault();
+                dataModel.IsMultiAnswer = dataQuestion?.IsMultiResult ?? false;
+                dataModel.ID = dataQuestion.OriginQuestionID;
+                dataModel.QuestionContent = dataQuestion.QuestionContent;
+                dataModel.SubAnalysName = dataQuestion.SubAnalysName;
+                dataModel.SubAnalysCode = dataQuestion.SubAnalysCode;
+                dataModel.MainAnalysName = dataQuestion.MainAnalysName;
+                dataModel.MainAnalysCode = dataQuestion.MainAnalysCode;
+                dataModel.SubAnalysPoint = dataQuestion.SubAnalysPoint;
+                dataModel.Answers = new List<AnswerDoing>();
+                foreach (var ans in item.Value)
+                {
+                    dataModel.Answers.Add(new AnswerDoing()
+                    {
+                        AnswerContent = ans.AnswerContent,
+                        AnswerSortOrder = ans.AnswerSortOrder,
+                    });
+                }
+                dataModel.Answers = dataModel.Answers.OrderBy(x => x.AnswerSortOrder).ToList();
+                data.Add(dataModel);
+            }
+            return new ServiceResponse()
+            {
+                Success = true,
+                Data = data
+            };
         }
     }
 }

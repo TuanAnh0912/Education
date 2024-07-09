@@ -17,5 +17,7 @@ namespace Education.Application.Interface
         Task<ExamRequestModel> GetExamsByCode(string examCode);
         Task<ServiceResponse> Getpaging(PagingRequestModel data);
         Task<ServiceResponse> InsertUserExam(List<UserExam> data);
+        Task<ServiceResponse> GetResultExam(MarkTestRequestModel data);
+        Task<ServiceResponse> GetDataExamDoingDetail(string examCode);
     }
 }

@@ -70,6 +70,17 @@ namespace Education.API.Controllers
         {
             return await _examTestService.InsertUserExam(data);
         }
+        [HttpPost("mark-test")]
+        public async Task<ServiceResponse> MarkTheTest(MarkTestRequestModel data)
+        {
+            return await _examTestService.GetResultExam(data);
+        }
+        [HttpGet("current-exam")]
+        public async Task<ServiceResponse> GetExamDoing(string code)
+        {
+            return await _examTestService.GetDataExamDoingDetail(code);
+        }
+
     }
 
 }

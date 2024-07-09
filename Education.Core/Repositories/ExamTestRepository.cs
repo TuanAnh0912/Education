@@ -160,5 +160,39 @@ namespace Education.Core.Repositories
             var res = await _dbContext.QueryUsingStore(param,sql, commandType: CommandType.Text);
             return res.ToList();
         }
+        public async Task<List<ExamResultDto>> GetResultByExamCode(string examCode)
+        {
+            var sql = "Proc_GetResultByExamCode";
+            var param = new Dictionary<string, object>()
+            {
+                {"v_ExamCode",examCode }
+            };
+            var res = await _dbContext.QueryUsingStore<ExamResultDto>(param, sql);
+            return res.ToList();
+        }
+        public async Task<bool> UpdateUserExam(UserExam dataUpdate)
+        {
+            var sql = "UPDATE user_exam SET IsTest = @isTest,Point = @point, ResultJson = @resultjson WHERE UserID = @userID AND ExamCode = @examCode AND IsTest IS FALSE;";
+            var param = new Dictionary<string, object>()
+            {
+                {"@isTest",true },
+                {"@resultjson",dataUpdate.ResultJson },
+                {"@userID",dataUpdate.UserID },
+                {"@examCode",dataUpdate.ExamCode },
+                {"@point",dataUpdate.Point },
+            };
+            var res = await _dbContext.ExcuseUsingStore(param, sql, commandType: CommandType.Text);
+            return res > 0;
+
+        }
+        public async Task<List<DataExamDoingDto>> GetDataExamDoing(string examCode)
+        {
+            var param = new Dictionary<string, object>()
+            {
+                {"v_ExamCode",examCode },
+            };
+            var res = await _dbContext.QueryUsingStore<DataExamDoingDto>(param, "Proc_GetExamDoingByCode");
+            return res.ToList();
+        }
     }
 }
