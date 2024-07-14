@@ -1,10 +1,13 @@
 ﻿using Education.Core.Database;
 using Education.Core.Interface;
 using Education.Core.Model;
+using Education.Core.Model.Core;
+using Education.Core.Model.DataModel;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Net.WebSockets;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -53,6 +56,21 @@ namespace Education.Core.Repositories
                 };
             var rsCheckLogin = (await _dbContext.QueryUsingStore(param, "Proc_CheckLogin")).FirstOrDefault();
             return rsCheckLogin;
+        }
+
+        /// <summary>
+        /// Hàm lấy dữ liệu cần thiết sau login
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public async Task<object> InitLogin(string userID)
+        {
+            var sqlGetRole = "SELECT rp.* FROM role_permission rp JOIN role_user ru USING (RoleID) WHERE ru.UserID = @UserID;";
+            var rsRole = await _dbContext.QueryUsingStore<RolePermission>(new Dictionary<string, object> { { "@UserID", userID } }, sqlGetRole, commandType: CommandType.Text);
+            return new
+            {
+                Roles = rsRole
+            };
         }
     }
 }

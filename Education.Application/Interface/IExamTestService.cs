@@ -19,5 +19,9 @@ namespace Education.Application.Interface
         Task<ServiceResponse> InsertUserExam(List<UserExam> data);
         Task<ServiceResponse> GetResultExam(MarkTestRequestModel data);
         Task<ServiceResponse> GetDataExamDoingDetail(string examCode);
+        /// <summary>
+        /// Lấy danh sách bài thi của học sinh
+        /// </summary>
+        Task<ServiceResponse> ExamsByUser(string userID);
     }
 }

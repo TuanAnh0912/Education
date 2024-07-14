@@ -1,4 +1,5 @@
 ﻿using Education.Application.Interface;
+using Education.Application.Service;
 using Education.Core.Model;
 using Education.Core.Model.Core;
 using Education.Core.Model.DataModel;
@@ -75,6 +76,18 @@ namespace Education.API.Controllers
             var res = await _userService.InsertUserExam(data);
             return Ok(res);
         }
+        [HttpPost("init-login")]
+        public async Task<ServiceResponse> InitLogin()
+        {
+            // var token = HttpContext.Request.Headers["Authorization"]
+            var rs = await _userService.InitLogin("aa922027-24ef-45f6-9479-48fa24dcdf51");
+            if (!rs.Success)
+            {
+                return new ServiceResponse(rs.Success, rs.Message ?? "");
+            }
+            return new ServiceResponse(rs.Success, rs.Message ?? "", rs);
+        }
+
         //[HttpGet("role-permission")]
         //public async Task<ServiceResponse> GetAllRole()
         //{

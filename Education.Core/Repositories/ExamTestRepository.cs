@@ -64,13 +64,25 @@ namespace Education.Core.Repositories
             tran.Commit();
             return true;
         }
+        public async Task<object> ExamsByUser(string userID)
+        {
+            var sql = "Select * FROM exam_test where ExamTestID IN (Select et.ExamTestID  FROM exam_test et JOIN exam_test_general etg USING(ExamTestID) JOIN exam_general eg ON etg.ExamTestGeneralID = eg.ExamGeneralID JOIN user_block ub ON eg.BlockID = ub.BlockID where ub.UserID = @UserID GROUP BY et.ExamTestID);";
+            var param = new Dictionary<string, object>()
+            {
+                {"@UserID", userID }
+            };
+            var res = await _dbContext.QueryUsingStore<object>(param, sql, commandType: CommandType.Text);
+            return res;
+        }
         public async Task<bool> InsertExamDetail(ExamRequestModel data)
         {
             var trans = _dbContext.GetDbTransaction();
             var paramExam = new Dictionary<string, object>()
             {
                 {"v_ExamTestCode",data.Exam.ExamTestCode},
-                {"v_IsOrigin",data.Exam.IsOrigin}
+                {"v_IsOrigin",data.Exam.IsOrigin},
+                {"v_Subject",data.Exam.Subject},
+                {"v_Time",data.Exam.Time}
             };
             var resInsertExam = await _dbContext.ExecuteScalarUsingStore(paramExam, "Proc_Insert_exam_test",trans);
             if (Convert.ToInt32(resInsertExam) <= 0)
