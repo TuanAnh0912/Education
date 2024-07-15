@@ -38,6 +38,12 @@ namespace Education.Application.Service
             data.Exam.ExamTestCode = RandomString(5);
             return await _examTestRepository.InsertExamDetail(data);
         }
+        public async Task<ServiceResponse> ExamsByUser(string userID)
+        {
+            var rs = await _examTestRepository.ExamsByUser(userID);
+
+            return new ServiceResponse(true, "", data: rs);
+        }
         /// <summary>
         /// Trộn đề
         /// </summary>

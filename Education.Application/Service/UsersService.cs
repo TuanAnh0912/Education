@@ -12,6 +12,9 @@ using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using Education.Application.Service.Base;
+using Education.Core.Database;
+using System.Data;
+using System.Net.WebSockets;
 
 namespace Education.Application.Service
 {
@@ -61,7 +64,13 @@ namespace Education.Application.Service
             }
             return new ServiceResponse(false, "Tài khoản đã tồn tại");
         }
-    
+
+        public async Task<ServiceResponse> InitLogin(string userID)
+        {
+            var rs = await _userRepository.InitLogin(userID);
+            return new ServiceResponse(true, "", data: rs);
+        }
+
         public async override Task<ServiceResponse> GetById(object ID)
         {
             try

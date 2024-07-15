@@ -12,6 +12,7 @@ namespace Education.Application.Interface
     public interface IUserService:IBaseService<User>
     {
         Task<ServiceResponse> InsertUserExam(UserBlockRequestModel data);
+        Task<ServiceResponse> InitLogin(string userID);
         //Task<ServiceResponse> GetAllRole();
         // Task<ServiceResponse> InsertRolePermisstion(RolePermisstionRequestModel model);
         // Task<ServiceResponse> SendMail();
