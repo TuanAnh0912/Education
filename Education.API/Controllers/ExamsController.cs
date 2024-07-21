@@ -1,4 +1,5 @@
 ﻿using Education.Application.Interface;
+using Education.Application.Service;
 using Education.Core.Model;
 using Education.Core.Model.Core;
 using Education.Core.Model.DataModel;
@@ -21,6 +22,13 @@ namespace Education.API.Controllers
         {
             this.currentType = typeof(ExamTest);
             _examTestService = serviceProvider.GetRequiredService<IExamTestService>();
+        }
+        [HttpPost("exams-by-user")]
+        public async Task<IActionResult> ExamByUser([FromBody] string userID)
+        {
+            //userID = "aa922027-24ef-45f6-9479-48fa24dcdf51";
+            var res = await _examTestService.ExamsByUser(userID);
+            return Ok(res);
         }
         [HttpPost("exam-detail")]
         public async Task<ServiceResponse> InsertExam(ExamRequestModel data)

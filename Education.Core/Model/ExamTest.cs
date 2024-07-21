@@ -15,7 +15,7 @@ namespace Education.Core.Model
         public int ExamTestID { get; set; }
         public string ExamTestCode { get; set; }
         public string Subject { get; set; }
-        public int Time { get; set; }
+        public string Time { get; set; }
         public bool IsOrigin { get; set; }
     }
 }

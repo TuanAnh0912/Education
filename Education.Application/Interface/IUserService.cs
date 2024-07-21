@@ -15,6 +15,7 @@ namespace Education.Application.Interface
         //Task<ServiceResponse> GetListUserExam();
         Task<ServiceResponse> Getpaging(PagingRequestModel data);
 
+        Task<ServiceResponse> InitLogin(string userID);
         //Task<ServiceResponse> GetAllRole();
         // Task<ServiceResponse> InsertRolePermisstion(RolePermisstionRequestModel model);
         // Task<ServiceResponse> SendMail();
