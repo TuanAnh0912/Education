@@ -75,6 +75,12 @@ namespace Education.API.Controllers
             var res = await _userService.InsertUserExam(data);
             return Ok(res);
         }
+        [HttpPost("paging")]
+        public async Task<ServiceResponse> GetPaging(PagingRequestModel data)
+        {
+            var res = await _userService.Getpaging(data);
+            return res;
+        }
         //[HttpGet("role-permission")]
         //public async Task<ServiceResponse> GetAllRole()
         //{

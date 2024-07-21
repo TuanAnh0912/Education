@@ -103,6 +103,21 @@ namespace Education.Application.Service
                 Success = true,
             };
         }
+        public async Task<ServiceResponse> Getpaging(PagingRequestModel data)
+        {
+            var resRole = await _userRepository.GetRoleUserByID(_UserID);
+            var isTeacher = false;
+            if(resRole != null && resRole.RoleName == "Teacher")
+            {
+                isTeacher = true;
+            }
+            var res = await _userRepository.GetPagingUserExamByID(_UserID, isTeacher, data.PageSize,data.PageIndex);
+            return new ServiceResponse()
+            {
+                Data = res,
+                Success = true,
+            };
+        }
         //public async Task<ServiceResponse> ResetPassword(string newPassword)
         //{
         //    var hashPassWord = AuthenHelpers.HashPassword(_UserName + newPassword);

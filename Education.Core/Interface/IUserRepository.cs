@@ -1,4 +1,6 @@
 ﻿using Education.Core.Model;
+using Education.Core.Model.DataModel;
+using Education.Core.Model.ResponseModel;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -12,6 +14,8 @@ namespace Education.Core.Interface
     {
         Task<User?> CheckLogin(string username, string password);
         Task<User> CheckByUserNameAndEmail(string userName);
+        Task<PagingResponse> GetPagingUserExamByID(Guid userID, bool isTearcher, int pageSize, int pageIndex);
+        Task<Role> GetRoleUserByID(Guid userID);
         //Task<User?> GetUserByRefreshToken(string resfreshToken);
     }
 }
