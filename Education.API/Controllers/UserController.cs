@@ -85,13 +85,8 @@ namespace Education.API.Controllers
         [HttpPost("init-login")]
         public async Task<ServiceResponse> InitLogin()
         {
-            // var token = HttpContext.Request.Headers["Authorization"]
-            var rs = await _userService.InitLogin("aa922027-24ef-45f6-9479-48fa24dcdf51");
-            if (!rs.Success)
-            {
-                return new ServiceResponse(rs.Success, rs.Message ?? "");
-            }
-            return new ServiceResponse(rs.Success, rs.Message ?? "", rs);
+            var rs = await _userService.InitLogin();
+            return rs;
         }
 
         //[HttpGet("role-permission")]
