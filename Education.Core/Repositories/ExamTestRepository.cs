@@ -71,7 +71,7 @@ namespace Education.Core.Repositories
             {
                 {"@UserID", userID }
             };
-            var res = await _dbContext.QueryUsingStore<object>(param, sql, commandType: CommandType.Text);
+            var res = await _dbContext.QueryUsingStore<ExamTest>(param, sql, commandType: CommandType.Text);
             return res;
         }
         public async Task<bool> InsertExamDetail(ExamRequestModel data)

@@ -38,9 +38,9 @@ namespace Education.Application.Service
             data.Exam.ExamTestCode = RandomString(5);
             return await _examTestRepository.InsertExamDetail(data);
         }
-        public async Task<ServiceResponse> ExamsByUser(string userID)
+        public async Task<ServiceResponse> ExamsByUser()
         {
-            var rs = await _examTestRepository.ExamsByUser(userID);
+            var rs = await _examTestRepository.ExamsByUser(_UserID.ToString());
 
             return new ServiceResponse(true, "", data: rs);
         }
@@ -333,7 +333,7 @@ namespace Education.Application.Service
             {
                 ResultJson = comment.ToString(),
                 Point = point,
-                UserID = data.UserID,
+                UserID = _UserID,
                 ExamCode = data.ExamCode,
                 IsTest = true
             } 

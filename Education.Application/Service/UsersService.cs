@@ -65,9 +65,9 @@ namespace Education.Application.Service
             return new ServiceResponse(false, "Tài khoản đã tồn tại");
         }
 
-        public async Task<ServiceResponse> InitLogin(string userID)
+        public async Task<ServiceResponse> InitLogin()
         {
-            var rs = await _userRepository.InitLogin(userID);
+            var rs = await _userRepository.InitLogin(_UserID.ToString());
             return new ServiceResponse(true, "", data: rs);
         }
 
