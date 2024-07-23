@@ -22,6 +22,6 @@ namespace Education.Application.Interface
         /// <summary>
         /// Lấy danh sách bài thi của học sinh
         /// </summary>
-        Task<ServiceResponse> ExamsByUser(string userID);
+        Task<ServiceResponse> ExamsByUser();
     }
 }

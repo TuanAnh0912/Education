@@ -66,7 +66,7 @@ namespace Education.Application.Service
             return new ServiceResponse(false, "Tài khoản đã tồn tại");
         }
 
-        public async Task<ServiceResponse> InitLogin(string userID)
+        public async Task<ServiceResponse> InitLogin()
         {
             var rs = await _rolePermisstionProvider.GetRolePermisstionsByUserID(_UserID);
             return new ServiceResponse(true, "", data: rs);

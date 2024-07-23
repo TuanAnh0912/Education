@@ -24,10 +24,10 @@ namespace Education.API.Controllers
             _examTestService = serviceProvider.GetRequiredService<IExamTestService>();
         }
         [HttpPost("exams-by-user")]
-        public async Task<IActionResult> ExamByUser([FromBody] string userID)
+        public async Task<IActionResult> ExamByUser()
         {
             //userID = "aa922027-24ef-45f6-9479-48fa24dcdf51";
-            var res = await _examTestService.ExamsByUser(userID);
+            var res = await _examTestService.ExamsByUser();
             return Ok(res);
         }
         [HttpPost("exam-detail")]
