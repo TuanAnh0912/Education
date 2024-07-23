@@ -23,13 +23,14 @@ namespace Education.Application.Service
         private readonly IUserRepository _userRepository;
         private readonly IRoleUserRepository _roleUserRepository;
         private readonly IExamTestRepository _examTestRepository;
-        private readonly IJwtUtils _jwtUtils;
+        private readonly IUserPermissionRepository _rolePermisstionProvider;
+
         public UsersService(IServiceProvider serviceProvider) : base(serviceProvider)
         {
             _userRepository = serviceProvider.GetRequiredService<IUserRepository>();
             _roleUserRepository = serviceProvider.GetRequiredService<IRoleUserRepository>();
             _examTestRepository = serviceProvider.GetRequiredService<IExamTestRepository>();
-            _jwtUtils = serviceProvider.GetRequiredService<IJwtUtils>();
+            _rolePermisstionProvider = serviceProvider.GetRequiredService<IUserPermissionRepository>();
         }
 
         // SELECT * from system_permission sp JOIN permission p ON p.PermissionID = sp.PermissionID 
@@ -67,7 +68,7 @@ namespace Education.Application.Service
 
         public async Task<ServiceResponse> InitLogin(string userID)
         {
-            var rs = await _userRepository.InitLogin(userID);
+            var rs = await _rolePermisstionProvider.GetRolePermisstionsByUserID(_UserID);
             return new ServiceResponse(true, "", data: rs);
         }
 
