@@ -184,7 +184,7 @@ namespace Education.Core.Repositories
         }
         public async Task<bool> UpdateUserExam(UserExam dataUpdate)
         {
-            var sql = "UPDATE user_exam SET IsTest = @isTest,Point = @point, ResultJson = @resultjson WHERE UserID = @userID AND ExamCode = @examCode AND IsTest IS FALSE;";
+            var sql = "UPDATE user_exam SET IsTest = @isTest,Point = @point, ResultJson = @resultjson WHERE UserID = @userID AND ExamCode = @examCode";
             var param = new Dictionary<string, object>()
             {
                 {"@isTest",true },

@@ -243,7 +243,7 @@ namespace Education.Application.Service
                 var dataModel = data.QuestionDetails[i];
                 if (dataModel.Results.Any())
                 {
-                    var isCorrect = dataModel.Results.All(item.Value.Select(k => k.OrderAnswer).OrderBy(x => x).Contains);
+                    var isCorrect = dataModel.Results.All(item.Value.Where(k=>k.IsTrue == true).Select(l => l.OrderAnswer).OrderBy(x => x).Contains);
                     if (isCorrect)
                     {
                         point += (10 / dataRsByCodeDic.Count);
