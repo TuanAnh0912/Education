@@ -8,6 +8,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using Education.Core.Model.DataModel;
 
 namespace Education.Application.Service
 {
@@ -21,13 +22,13 @@ namespace Education.Application.Service
             _userRepository = userRepository;
 
         }
-        public string GenerateJwtToken(User user)
+        public string GenerateJwtToken(UserDto user)
         {
             var claims = new List<Claim>();
             claims.Add(new Claim(ClaimTypes.Name, user.UserName ?? ""));
             claims.Add(new Claim("UserID", user.UserID.ToString()));
             claims.Add(new Claim("UserName", user.UserName?.ToString() ?? ""));
-            claims.Add(new Claim("RoleName", "User"));
+            claims.Add(new Claim("RoleName", user.RoleName));
 
             var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtIssuerOptions.SecretKey));
 

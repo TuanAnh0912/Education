@@ -48,14 +48,14 @@ namespace Education.Core.Repositories
             return (await _dbContext.QueryUsingStore(param1, "Proc_CheckUserNameAndEmail")).FirstOrDefault();
         }
 
-        public async Task<User?> CheckLogin(string username, string password)
+        public async Task<UserDto?> CheckLogin(string username, string password)
         {
             var param = new Dictionary<string, object>
                 {
                     {"v_UserName",username },
                     {"v_Password", password }
                 };
-            var rsCheckLogin = (await _dbContext.QueryUsingStore(param, "Proc_CheckLogin")).FirstOrDefault();
+            var rsCheckLogin = (await _dbContext.QueryUsingStore<UserDto>(param, "Proc_CheckLogin")).FirstOrDefault();
             return rsCheckLogin;
         }
         public async Task<Role> GetRoleUserByID(Guid userID)
