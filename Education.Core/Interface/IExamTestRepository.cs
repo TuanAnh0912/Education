@@ -16,12 +16,12 @@ namespace Education.Core.Interface
         Task<List<CorrectQuestionDto>> GetDetailCorrectQuestion(string examCode, string lstCorrectQuestion);
         Task<bool> InsertExamDetail(ExamRequestModel data);
         Task<bool> InsertShuffleExam(List<RuleSortExamQuestion> ruleSortExamQuestions, List<RuleSortQuestionAnswer> ruleSortQuestionAnswers);
-        Task<List<ShuffleExamDto>> GetShuffleExam(int ExamTestID);
+        Task<List<ShuffleExamDto>> GetShuffleExam(string ExamTestID);
         Task<PagingResponse> GetPaging(int pageSize, int pageIndex, string stringWhere = "");
         Task<List<ExamTest>> GetExamTestsByBlockID(int BlockID);
         Task<List<ExamResultDto>> GetResultByExamCode(string examCode);
         Task<bool> UpdateUserExam(UserExam dataUpdate);
         Task<List<DataExamDoingDto>> GetDataExamDoing(string examCode);
-        Task<object> ExamsByUser(string userID);
+        Task<PagingResponse> ExamsByUser(PagingRequestModel pagingRequest, string userID);
     }
 }

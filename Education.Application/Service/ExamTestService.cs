@@ -38,11 +38,11 @@ namespace Education.Application.Service
             data.Exam.ExamTestCode = RandomString(5);
             return await _examTestRepository.InsertExamDetail(data);
         }
-        public async Task<ServiceResponse> ExamsByUser()
+        public async Task<ServiceResponse> ExamsByUser(PagingRequestModel pagingRequest)
         {
-            var rs = await _examTestRepository.ExamsByUser(_UserID.ToString());
+            var pagingResponse = await _examTestRepository.ExamsByUser(pagingRequest, _UserID.ToString());
 
-            return new ServiceResponse(true, "", data: rs);
+            return new ServiceResponse(true, "", data: pagingResponse);
         }
         /// <summary>
         /// Trộn đề
@@ -134,9 +134,11 @@ namespace Education.Application.Service
         {
             var newShuffleQuestion = new List<RuleSortExamQuestion>();
             var newShuffleAnswer = new List<RuleSortQuestionAnswer>();
+            Random random = new Random();
             for (int i = 0; i < 3; i++)
             {
-                var shuffleCode = $"{data.Exam.ExamTestCode}{i}";
+                int randnum = random.Next(100);
+                var shuffleCode = $"{data.Exam.ExamTestCode}_{randnum}";
                 var lstSortQuestion = data.QuestionAnswers.Select(x => x.QuestionSortOrder).ToList();
                 var listNewOrderQuestion = Shuffle(lstSortQuestion);
                 for (int j = 0; j < listNewOrderQuestion.Count; j++)
@@ -176,11 +178,12 @@ namespace Education.Application.Service
             res.Success = true;
             return res;
         }
-        public async Task<List<ExamRequestModel>> GetShuffleExam(int examID)
+        public async Task<ServiceResponse> GetShuffleExam(string examID)
         {
             var dataShuffle = await _examTestRepository.GetShuffleExam(examID);
             var datasExamDic = dataShuffle.GroupBy(x => x.ExamCode).ToDictionary(k => k.Key, g => g.ToList());
-            var res = new List<ExamRequestModel>();
+            var pagingResponse = new PagingResponse();
+            var pageData = new List<ExamRequestModel>();
             foreach (var dataExamDic in datasExamDic)
             {
                 var exam = new ExamRequestModel();
@@ -205,9 +208,10 @@ namespace Education.Application.Service
                 }
                 exam.QuestionAnswers = exam.QuestionAnswers.OrderBy(x => x.QuestionSortOrder).ToList();
                 exam.QuestionAnswers.ForEach(x => x.Answers = x.Answers.OrderBy(k => k.AnswerSortOrder).ToList());
-                res.Add(exam);
+                pageData.Add(exam);
             }
-            return res;
+            pagingResponse.PageData = pageData;
+            return new ServiceResponse(true, "", data: pagingResponse);
         }
         public List<int> Shuffle(List<int> list)
         {

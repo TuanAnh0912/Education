@@ -1,6 +1,7 @@
 ﻿using Education.Core.Model;
 using Education.Core.Model.Core;
 using Education.Core.Model.RequestModel;
+using Education.Core.Model.ResponseModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace Education.Application.Interface
     {
         Task<bool> InsertExamDetail(ExamRequestModel data);
         Task<bool> ShuffleExam(string examTestCode);
-        Task<List<ExamRequestModel>> GetShuffleExam(int examID);
+        Task<ServiceResponse> GetShuffleExam(string examID);
         Task<ExamRequestModel> GetExamsByCode(string examCode);
         Task<ServiceResponse> Getpaging(PagingRequestModel data);
         Task<ServiceResponse> InsertUserExam(List<UserExam> data);
@@ -22,6 +23,6 @@ namespace Education.Application.Interface
         /// <summary>
         /// Lấy danh sách bài thi của học sinh
         /// </summary>
-        Task<ServiceResponse> ExamsByUser();
+        Task<ServiceResponse> ExamsByUser(PagingRequestModel pagingRequest);
     }
 }
