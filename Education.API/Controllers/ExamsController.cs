@@ -24,10 +24,9 @@ namespace Education.API.Controllers
             _examTestService = serviceProvider.GetRequiredService<IExamTestService>();
         }
         [HttpPost("exams-by-user")]
-        public async Task<IActionResult> ExamByUser()
+        public async Task<IActionResult> ExamByUser(PagingRequestModel pagingRequest)
         {
-            //userID = "aa922027-24ef-45f6-9479-48fa24dcdf51";
-            var res = await _examTestService.ExamsByUser();
+            var res = await _examTestService.ExamsByUser(pagingRequest);
             return Ok(res);
         }
         [HttpPost("exam-detail")]
@@ -51,10 +50,10 @@ namespace Education.API.Controllers
             return res;
         }
         [HttpGet("all-shuff-exams")]
-        public async Task<ServiceResponse> GetAllShuffleExam([FromQuery] int examID)
+        public async Task<ServiceResponse> GetAllShuffleExam([FromQuery] string examID)
         {
-            var res = new ServiceResponse();
-            res.Data = await _examTestService.GetShuffleExam(examID);
+            //res.Data = await _examTestService.GetShuffleExam(examID);
+            var res = await _examTestService.GetShuffleExam(examID);
             return res;
         }
         [HttpGet("exam-bycode")]

@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -64,14 +65,26 @@ namespace Education.Core.Repositories
             tran.Commit();
             return true;
         }
-        public async Task<object> ExamsByUser(string userID)
+        public async Task<PagingResponse> ExamsByUser(PagingRequestModel pagingRequest, string userID)
         {
-            var sql = "Select * FROM exam_test where ExamTestID IN (Select et.ExamTestID  FROM exam_test et JOIN exam_test_general etg USING(ExamTestID) JOIN exam_general eg ON etg.ExamTestGeneralID = eg.ExamGeneralID JOIN user_block ub ON eg.BlockID = ub.BlockID where ub.UserID = @UserID GROUP BY et.ExamTestID);";
+            var res = new PagingResponse();
+            var sql = "exam_test where ExamTestID IN (Select et.ExamTestID FROM exam_test et " +
+                "JOIN exam_test_general etg USING(ExamTestID) " +
+                "JOIN exam_general eg ON etg.ExamTestGeneralID = eg.ExamGeneralID " +
+                "JOIN user_block ub ON eg.BlockID = ub.BlockID " +
+                "where ub.UserID = @UserID AND (ExamTestCode like @stringWhere or Subject like @stringWhere) " +
+                "GROUP BY et.ExamTestID) LIMIT @PageSize OFFSET @OffSet;";
             var param = new Dictionary<string, object>()
             {
-                {"@UserID", userID }
+                {"@UserID", userID },
+                {"@PageSize",pagingRequest.PageIndex },
+                {"@OffSet",pagingRequest.PageSize },
+                {"@StringWhere",$"%{pagingRequest.ValueWhere}%" },
             };
-            var res = await _dbContext.QueryUsingStore<ExamTest>(param, sql, commandType: CommandType.Text);
+            var data = await _dbContext.QueryUsingStore<ExamTest>(param, "SELECT * FROM " + sql, commandType: CommandType.Text);
+            res.PageData = data;
+            var total = await _dbContext.QueryUsingStore<int>(param, "SELECT COUNT(1) FROM " + sql, commandType: CommandType.Text);
+            res.PageSize = total.FirstOrDefault();
             return res;
         }
         public async Task<bool> InsertExamDetail(ExamRequestModel data)
@@ -127,7 +140,7 @@ namespace Education.Core.Repositories
             trans.Commit();
             return true;
         }
-        public async Task<List<ShuffleExamDto>> GetShuffleExam(int ExamTestID)
+        public async Task<List<ShuffleExamDto>> GetShuffleExam(string ExamTestID)
         {
             var sql = "select req.ExamCode,req.ShuffleOrder,req.OriginQuestionID,q.QuestionContent,rqa.ShuffleOrderAnswer,a.AnswerContent,a.IsTrue  from " +
                 "rulesort_exam_question req JOIN question q on req.OriginQuestionID = q.QuestionID " +
