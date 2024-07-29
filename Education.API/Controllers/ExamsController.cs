@@ -88,6 +88,11 @@ namespace Education.API.Controllers
         {
             return await _examTestService.GetDataExamDoingDetail(code);
         }
+        [HttpGet("result-analys")]
+        public async Task<ServiceResponse> GetResultAnalys(string examCode)
+        {
+            return await _examTestService.GetDetailAnalys(examCode);
+        }
 
     }
 

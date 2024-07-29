@@ -376,5 +376,14 @@ namespace Education.Application.Service
                 Data = data
             };
         }
+        public async Task<ServiceResponse> GetDetailAnalys(string examCode)
+        {
+            var data = await _examTestRepository.GetDetailAnalys(examCode,_UserID);
+            return new ServiceResponse()
+            {
+                Success = true,
+                Data = data
+            };
+        }
     }
 }

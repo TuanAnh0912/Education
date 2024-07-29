@@ -206,5 +206,16 @@ namespace Education.Core.Repositories
             var res = await _dbContext.QueryUsingStore<DataExamDoingDto>(param, "Proc_GetExamDoingByCode");
             return res.ToList();
         }
+        public async Task<UserExamDto> GetDetailAnalys(string examCode, Guid userID)
+        {
+            var param = new Dictionary<string, object>()
+            {
+                {"@userID",userID },
+                {"@examCode",examCode },
+            };
+            var sql = "select * from user_exam ue JOIN user u on ue.UserID = u.UserID WHERE u.UserID = @userID AND ue.ExamCode = @examCode;";
+            var res = await _dbContext.QueryUsingStore<UserExamDto>(param, sql,commandType:CommandType.Text);
+            return res.FirstOrDefault();
+        }
     }
 }

@@ -12,7 +12,17 @@ namespace Education.Application.Interface
     public interface IExamTestService:IBaseService<ExamTest>
     {
         Task<bool> InsertExamDetail(ExamRequestModel data);
+        /// <summary>
+        /// Trộn đề
+        /// </summary>
+        /// <param name="examTestCode"></param>
+        /// <returns></returns>
         Task<bool> ShuffleExam(string examTestCode);
+        /// <summary>
+        /// Lấy đề sau khi trộn
+        /// </summary>
+        /// <param name="examID"></param>
+        /// <returns></returns>
         Task<List<ExamRequestModel>> GetShuffleExam(int examID);
         Task<ExamRequestModel> GetExamsByCode(string examCode);
         Task<ServiceResponse> Getpaging(PagingRequestModel data);
@@ -23,5 +33,11 @@ namespace Education.Application.Interface
         /// Lấy danh sách bài thi của học sinh
         /// </summary>
         Task<ServiceResponse> ExamsByUser();
+        /// <summary>
+        /// Lấy Thông tin đánh giá sau khi chấm điểm
+        /// </summary>
+        /// <param name="examCode"></param>
+        /// <returns></returns>
+        Task<ServiceResponse> GetDetailAnalys(string examCode);
     }
 }

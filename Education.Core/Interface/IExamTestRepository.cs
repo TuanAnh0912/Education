@@ -23,5 +23,6 @@ namespace Education.Core.Interface
         Task<bool> UpdateUserExam(UserExam dataUpdate);
         Task<List<DataExamDoingDto>> GetDataExamDoing(string examCode);
         Task<object> ExamsByUser(string userID);
+        Task<UserExamDto> GetDetailAnalys(string examCode, Guid userID);
     }
 }
