@@ -34,10 +34,27 @@ namespace Education.Application.Service
                 var id = Convert.ToInt32(resInsertExamGeneral);
                 var examTestGenerals = new List<ExamTestGeneral>();
                 data.LstTestID.ForEach(x => examTestGenerals.Add(
-                    new ExamTestGeneral() { ExamGeneralID = id, ExamTestID = x }));
+                    new ExamTestGeneral() { ExamGeneralID = id, ExamTestID = x.ID }));
+                var lstUserIdByBlockID = await _examGeneralRepository.GetLstUserIDByBlockID(data.BlockID);
+
+                var listDataUserExam = new List<UserExam>();
+                foreach (var userID in lstUserIdByBlockID)
+                {
+                    var userExam = new UserExam();
+                    userExam.UserID = userID;
+                    data.LstTestID.ForEach(x => userExam.ExamCode = x.Code);
+                    listDataUserExam.Add(userExam);
+                }
+                
+                //Insert đề vào kỳ thi
                 var dataInsert = examTestGenerals.Cast<BaseModel>().ToList();
                 var resInsert = await _examGeneralRepository.MultiInsert(dataInsert, false);
-                res.Success = Convert.ToBoolean(resInsert);
+
+                //Insert đề thi vào các học sinh đã phân khối trước đó
+                var dataInserUserExam = listDataUserExam.Cast<BaseModel>().ToList();
+                var resInsertUserExam = await _examGeneralRepository.MultiInsert(dataInserUserExam, false);
+
+                res.Success = Convert.ToBoolean(resInsert) && Convert.ToBoolean(resInsertUserExam);
             }
             return res;
         }

@@ -9,5 +9,6 @@ namespace Education.Core.Interface
 {
     public interface IExamGeneralRepository:IGenericRepository<ExamGeneral>
     {
+        Task<List<Guid>> GetLstUserIDByBlockID(int blockID);
     }
 }

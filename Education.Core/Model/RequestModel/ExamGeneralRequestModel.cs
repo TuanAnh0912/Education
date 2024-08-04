@@ -10,6 +10,11 @@ namespace Education.Core.Model.RequestModel
     {
         public string Name { get; set; }
         public int BlockID { get; set; }
-        public List<int> LstTestID { get; set; }
+        public List<ExamInfor> LstTestID { get; set; }
+    }
+    public class ExamInfor
+    {
+        public int ID { get; set; }
+        public string Code { get; set; }
     }
 }
