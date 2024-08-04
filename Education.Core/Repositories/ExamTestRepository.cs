@@ -99,7 +99,10 @@ namespace Education.Core.Repositories
                 {"v_ExamTestCode",data.Exam.ExamTestCode},
                 {"v_IsOrigin",data.Exam.IsOrigin},
                 {"v_Subject",data.Exam.Subject},
-                {"v_Time",data.Exam.Time}
+                {"v_Time",data.Exam.Time},
+                {"v_EducationTrainName",data.Exam.EducationTrainName},
+                {"v_SchoolName",data.Exam.SchoolName},
+                {"v_ExamTestName",data.Exam.ExamTestName}
             };
             var resInsertExam = await _dbContext.ExecuteScalarUsingStore(paramExam, "Proc_Insert_exam_test",trans);
             if (Convert.ToInt32(resInsertExam) <= 0)
