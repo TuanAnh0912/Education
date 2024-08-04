@@ -58,5 +58,27 @@ namespace Education.Application.Service
             }
             return res;
         }
+
+        public async Task<ServiceResponse> Paging(PagingRequestModel pagingRequest)
+        {
+            var pagingResponse = await _examGeneralRepository.Paging(pagingRequest);
+            var res = new ServiceResponse()
+            {
+                Data = pagingResponse,
+                Success = true
+            };
+            return res;
+        }
+
+        public async Task<ServiceResponse> PagingByUser(PagingRequestModel pagingRequest)
+        {
+            var pagingResponse = await _examGeneralRepository.PagingByUser(pagingRequest, _UserID.ToString());
+            var res = new ServiceResponse()
+            {
+                Data = pagingResponse,
+                Success = true
+            };
+            return res;
+        }
     }
 }

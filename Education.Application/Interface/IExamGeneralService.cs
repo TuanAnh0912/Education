@@ -9,8 +9,10 @@ using System.Threading.Tasks;
 
 namespace Education.Application.Interface
 {
-    public interface IExamGeneralService:IBaseService<ExamGeneral>
+    public interface IExamGeneralService : IBaseService<ExamGeneral>
     {
         Task<ServiceResponse> InsertsExamTestGeneral(ExamGeneralRequestModel data);
+        Task<ServiceResponse> Paging(PagingRequestModel pagingRequest);
+        Task<ServiceResponse> PagingByUser(PagingRequestModel pagingRequest);
     }
 }
