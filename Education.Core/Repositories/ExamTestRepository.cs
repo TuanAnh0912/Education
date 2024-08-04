@@ -12,7 +12,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing.Printing;
 using System.Linq;
+using System.Net.WebSockets;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Transactions;
 
@@ -68,20 +70,22 @@ namespace Education.Core.Repositories
         public async Task<PagingResponse> ExamsByUser(PagingRequestModel pagingRequest, string userID)
         {
             var res = new PagingResponse();
-            var sql = "exam_test where ExamTestID IN (Select et.ExamTestID FROM exam_test et " +
-                "JOIN exam_test_general etg USING(ExamTestID) " +
-                "JOIN exam_general eg ON etg.ExamTestGeneralID = eg.ExamGeneralID " +
-                "JOIN user_block ub ON eg.BlockID = ub.BlockID " +
-                "where ub.UserID = @UserID AND (ExamTestCode like @stringWhere or Subject like @stringWhere) " +
-                "GROUP BY et.ExamTestID) LIMIT @PageSize OFFSET @OffSet;";
+            var sql = new StringBuilder();
+            sql.Append(" (SELECT ue.UserID, req.ExamTestID, ue.ExamCode as SubExamCode from user_exam ue JOIN rulesort_exam_question req ON req.ExamCode = ue.ExamCode GROUP BY ue.UserID, req.ExamTestID, ue.ExamCode) tmp");
+            sql.Append(" JOIN exam_test ut USING(ExamTestID)");
+            sql.Append(" WHERE tmp.UserID = @UserID");
+            
+            var pageIndex = pagingRequest.PageIndex;
+            var pageSize = pagingRequest.PageSize;
+            var offSet = (pageIndex - 1) * pageSize;
             var param = new Dictionary<string, object>()
             {
                 {"@UserID", userID },
-                {"@PageSize",pagingRequest.PageIndex },
-                {"@OffSet",pagingRequest.PageSize },
+                {"@PageSize",pageSize },
+                {"@OffSet",offSet },
                 {"@StringWhere",$"%{pagingRequest.ValueWhere}%" },
             };
-            var data = await _dbContext.QueryUsingStore<ExamTest>(param, "SELECT * FROM " + sql, commandType: CommandType.Text);
+            var data = await _dbContext.QueryUsingStore<object>(param, "SELECT tmp.*, ut.ExamTestCode as MainExamCode, ut.Subject, ut.Time FROM " + sql, commandType: CommandType.Text);
             res.PageData = data;
             var total = await _dbContext.QueryUsingStore<int>(param, "SELECT COUNT(1) FROM " + sql, commandType: CommandType.Text);
             res.PageSize = total.FirstOrDefault();
