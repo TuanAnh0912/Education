@@ -1,4 +1,5 @@
 ﻿using Education.Core.Model;
+using Education.Core.Model.RequestModel;
 using Education.Core.Model.ResponseModel;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,6 @@ namespace Education.Core.Interface
 {
     public interface IAnalysisContentRepository:IGenericRepository<AnalysisContent>
     {
-        Task<PagingResponse> GetPagingAnalysisContent(int pageSize, int pageIndex);
+        Task<PagingResponse> GetPagingAnalysisContent(PagingRequestModel pagingRequest);
     }
 }

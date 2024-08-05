@@ -1,4 +1,5 @@
 ﻿using Education.Application.Interface;
+using Education.Application.Service;
 using Education.Core.Model;
 using Education.Core.Model.Core;
 using Education.Core.Model.DataModel;
@@ -21,6 +22,11 @@ namespace Education.API.Controllers
         {
             this.currentType = typeof(AnalysisContent);
             _analysisContentService = serviceProvider.GetRequiredService<IAnalysisContentService>();
+        }
+        [HttpPost("paging")]
+        public async Task<ServiceResponse> Paging(PagingRequestModel pagingRequest)
+        {
+            return await _analysisContentService.PagingAnalysis(pagingRequest);
         }
     }
 
