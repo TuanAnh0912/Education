@@ -87,5 +87,6 @@ namespace Education.Core.Repositories
             res.PageSize = total.FirstOrDefault();
             return res;
         }
+            
     }
 }

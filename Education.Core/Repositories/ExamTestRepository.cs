@@ -237,5 +237,15 @@ namespace Education.Core.Repositories
             var res = await _dbContext.QueryUsingStore<UserExamDto>(param, sql,commandType:CommandType.Text);
             return res.FirstOrDefault();
         }
+        public async  Task<List<RuleSortExamQuestion>> GetShuffleExaByIDs(List<int> Ids)
+        {
+            var sql = "select ExamTestID,ExamCode from rulesort_exam_question WHERE ExamTestID in @IDs GROUP by ExamTestID,ExamCode;";
+            var param = new Dictionary<string, object>()
+            {
+                {"@IDs", Ids}
+            };
+            var res = await _dbContext.QueryUsingStore<RuleSortExamQuestion>(param, sql, commandType: CommandType.Text);
+            return res.ToList();
+        }
     }
 }

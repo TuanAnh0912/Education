@@ -18,9 +18,11 @@ namespace Education.Application.Service
     public class ExamGeneralService : BaseService<ExamGeneral>, IExamGeneralService
     {
         private IExamGeneralRepository _examGeneralRepository;
+        private IExamTestRepository _examTestRepository;
         public ExamGeneralService(IServiceProvider serviceProvider) : base(serviceProvider)
         {
             _examGeneralRepository = serviceProvider.GetRequiredService<IExamGeneralRepository>();
+            _examTestRepository = serviceProvider.GetRequiredService<IExamTestRepository>();
         }
         public async Task<ServiceResponse> InsertsExamTestGeneral(ExamGeneralRequestModel data)
         {
@@ -32,18 +34,27 @@ namespace Education.Application.Service
             if (Convert.ToInt32(resInsertExamGeneral) > 0)
             {
                 var id = Convert.ToInt32(resInsertExamGeneral);
+                //Lấy các đê trộn
+                var lstIDExam = data.LstTestID.Select(x => x.ID).ToList();
+                var resShuffle = await _examTestRepository.GetShuffleExaByIDs(lstIDExam);
+                var dicShuffle = resShuffle.GroupBy(x => x.ExamTestID).ToDictionary(k => k.Key, g => g.ToList());
+
                 var examTestGenerals = new List<ExamTestGeneral>();
                 data.LstTestID.ForEach(x => examTestGenerals.Add(
                     new ExamTestGeneral() { ExamGeneralID = id, ExamTestID = x.ID }));
                 var lstUserIdByBlockID = await _examGeneralRepository.GetLstUserIDByBlockID(data.BlockID);
-
                 var listDataUserExam = new List<UserExam>();
+                Random random = new Random();
                 foreach (var userID in lstUserIdByBlockID)
                 {
                     var userExam = new UserExam();
                     userExam.UserID = userID;
-                    data.LstTestID.ForEach(x => userExam.ExamCode = x.Code);
-                    listDataUserExam.Add(userExam);
+                    foreach (var shuffleExam in dicShuffle)
+                    {
+                        int randomNumber = random.Next(0, shuffleExam.Value.Count - 1);
+                        userExam.ExamCode = shuffleExam.Value.ToList()[randomNumber].ExamCode;
+                        listDataUserExam.Add(userExam);
+                    }
                 }
                 
                 //Insert đề vào kỳ thi

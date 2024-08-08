@@ -24,5 +24,6 @@ namespace Education.Core.Interface
         Task<List<DataExamDoingDto>> GetDataExamDoing(string examCode);
         Task<PagingResponse> ExamsByUser(PagingRequestModel pagingRequest, string userID);
         Task<UserExamDto> GetDetailAnalys(string examCode, Guid userID);
+        Task<List<RuleSortExamQuestion>> GetShuffleExaByIDs(List<int> Ids);
     }
 }
