@@ -11,9 +11,12 @@ namespace Education.Core.Model
     public class AnalysisContent:BaseModel
     {
         public int AnalysisContentID { get; set; }
+        public string SubjectCode { get; set; }
+        public string Code { get; set; }
         public string Name { get; set; }
         public int AnalysisHeaderID { get; set; }
-        public string Code { get; set; }
-        public double Point { get; set; }
+        public decimal Point { get; set; }
+        public bool IsMain { get; set; }
+        public bool IsSystem { get; set; }
     }
 }

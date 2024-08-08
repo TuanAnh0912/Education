@@ -85,7 +85,7 @@ namespace Education.Core.Repositories
                 {"@OffSet",offSet },
                 {"@StringWhere",$"%{pagingRequest.ValueWhere}%" },
             };
-            var data = await _dbContext.QueryUsingStore<object>(param, "SELECT tmp.*, ut.ExamTestCode as MainExamCode, ut.Subject, ut.Time FROM " + sql, commandType: CommandType.Text);
+            var data = await _dbContext.QueryUsingStore<object>(param, "SELECT tmp.*, ut.ExamTestCode as MainExamCode, ut.SubjectName, ut.Time FROM " + sql, commandType: CommandType.Text);
             res.PageData = data;
             var total = await _dbContext.QueryUsingStore<int>(param, "SELECT COUNT(1) FROM " + sql, commandType: CommandType.Text);
             res.PageSize = total.FirstOrDefault();
@@ -97,12 +97,13 @@ namespace Education.Core.Repositories
             var paramExam = new Dictionary<string, object>()
             {
                 {"v_ExamTestCode",data.Exam.ExamTestCode},
-                {"v_IsOrigin",data.Exam.IsOrigin},
-                {"v_Subject",data.Exam.Subject},
+                {"v_ExamTestName",data.Exam.ExamTestName},
+                {"v_SubjectCode",data.Exam.SubjectCode},
+                {"v_SubjectName",data.Exam.SubjectName},
                 {"v_Time",data.Exam.Time},
+                {"v_IsOrigin",data.Exam.IsOrigin},
                 {"v_EducationTrainName",data.Exam.EducationTrainName},
                 {"v_SchoolName",data.Exam.SchoolName},
-                {"v_ExamTestName",data.Exam.ExamTestName}
             };
             var resInsertExam = await _dbContext.ExecuteScalarUsingStore(paramExam, "Proc_Insert_exam_test",trans);
             if (Convert.ToInt32(resInsertExam) <= 0)
@@ -119,8 +120,8 @@ namespace Education.Core.Repositories
                 questionModel.IsTrue = item.IsTrue;
                 questionModel.QuestionSortOrder = item.QuestionSortOrder;
                 questionModel.QuestionContent = item.QuestionContent;
-                questionModel.MainAnalysysID = item.MainAnalysysID;
-                questionModel.SubAnalysysID = item.SubAnalysysID;
+                questionModel.MainAnalysisCode = item.MainAnalysisCode;
+                questionModel.SubAnalysisCode = item.SubAnalysisCode;
                 questionModel.Image = item.Image;
                 questionModel.ExamTestID = Convert.ToInt32(resInsertExam);
                 answerQuestion.Add(questionModel);
@@ -164,7 +165,7 @@ namespace Education.Core.Repositories
         {
             var dataPaging = new PagingResponse();
             var offSet = (pageIndex - 1) * pageSize;
-            var sqlData = " Select * from exam_test where (ExamTestCode like @stringWhere or Subject like @stringWhere) ORDER BY CreatedDate limit @pageSize offset @offSet;";
+            var sqlData = " Select * from exam_test where (ExamTestCode like @stringWhere or SubjectName like @stringWhere) ORDER BY CreatedDate limit @pageSize offset @offSet;";
             var param = new Dictionary<string, object>()
             {
                {"@stringWhere",$"%{stringWhere}%" },
@@ -173,7 +174,7 @@ namespace Education.Core.Repositories
             };
             var res = await _dbContext.QueryUsingStore<ExamTest>(param, sqlData, commandType: CommandType.Text);
             dataPaging.PageData = res.ToList();
-            var sqlTotal = " Select count(1)  as Total from exam_test where (ExamTestCode like @stringWhere or Subject like @stringWhere);";
+            var sqlTotal = " Select count(1)  as Total from exam_test where (ExamTestCode like @stringWhere or SubjectName like @stringWhere);";
             var param2 = new Dictionary<string, object>()
             {
                 {"@stringWhere",$"%{stringWhere}%" },

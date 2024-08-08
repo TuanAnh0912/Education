@@ -15,6 +15,7 @@ namespace Education.Core.Model.RequestModel
     public class QuestionAnswers:Question
     {
         public List<Answer> Answers { get; set; } = new List<Answer>();
+        public bool? IsMultiResult { get; set; }
 
     }
 }
