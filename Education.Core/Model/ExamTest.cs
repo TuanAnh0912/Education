@@ -14,10 +14,11 @@ namespace Education.Core.Model
         [Key]
         public int ExamTestID { get; set; }
         public string ExamTestCode { get; set; }
+        public string ExamTestName { get; set; }
+        public string SubjectCode { get; set; }
+        public string SubjectName { get; set; }
         public string EducationTrainName { get; set; }
         public string SchoolName { get; set; }
-        public string ExamTestName { get; set; }
-        public string Subject { get; set; }
         public int Time { get; set; }
         public bool IsOrigin { get; set; }
     }

@@ -66,8 +66,8 @@ namespace Education.Application.Service
                 {
                     Image = item.Value.FirstOrDefault()?.Image ?? "",
                     QuestionID = item.Value.FirstOrDefault()?.QuestionID ?? Guid.Empty,
-                    MainAnalysysID = item.Value.FirstOrDefault()?.MainAnalysysID ?? 0,
-                    SubAnalysysID = item.Value.FirstOrDefault()?.SubAnalysysID ?? 0,
+                    MainAnalysisCode = item.Value.FirstOrDefault()?.MainAnalysisCode ?? "",
+                    SubAnalysisCode = item.Value.FirstOrDefault()?.SubAnalysisCode ?? "",
                     QuestionSortOrder = item.Value.FirstOrDefault()?.QuestionSortOrder ?? 0,
                     IsTrue = item.Value.FirstOrDefault()?.IsTrue ?? false,
                 };
@@ -109,8 +109,8 @@ namespace Education.Application.Service
                 {
                     Image = item.Value.FirstOrDefault()?.Image ?? "",
                     QuestionID = item.Value.FirstOrDefault()?.QuestionID ?? Guid.Empty,
-                    MainAnalysysID = item.Value.FirstOrDefault()?.MainAnalysysID ?? 0,
-                    SubAnalysysID = item.Value.FirstOrDefault()?.SubAnalysysID ?? 0,
+                    MainAnalysisCode = item.Value.FirstOrDefault()?.MainAnalysisCode ?? "",
+                    SubAnalysisCode = item.Value.FirstOrDefault()?.SubAnalysisCode ?? "",
                     QuestionSortOrder = item.Value.FirstOrDefault()?.QuestionSortOrder ?? 0,
                     IsTrue = item.Value.FirstOrDefault()?.IsTrue ?? false,
                     QuestionContent = item.Value.FirstOrDefault()?.QuestionContent ?? ""

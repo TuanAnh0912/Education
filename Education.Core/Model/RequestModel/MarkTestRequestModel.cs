@@ -16,7 +16,9 @@ namespace Education.Core.Model.RequestModel
     {
         public int Order { get; set; }
         public List<int> Results { get; set; }
+        // M
         public string SubAnalysCode { get; set; }
+        // N
         public string MainAnalysCode { get; set; }
         public string MainAnalysName { get; set; }
         public double SubAnalysPoint { get; set; }

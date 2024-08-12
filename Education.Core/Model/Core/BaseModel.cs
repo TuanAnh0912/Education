@@ -44,5 +44,8 @@ namespace Education.Core.Model.Core
             }
             return null;
         }
+
+        //public DateTime? CreatedDate { get; set; }
+        //public string CreatedBy { get; set; }
     }
 }
