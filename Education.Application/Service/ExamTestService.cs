@@ -279,59 +279,59 @@ namespace Education.Application.Service
                 {
                     if (poinSub < 3)
                     {
-                        comment.AppendLine($"Bạn cần bổ sung kiến thức và tính toán kỹ lưỡng hơn {nameMainAnalys}");
+                        comment.AppendLine($"Bạn cần bổ sung kiến thức và tính toán kỹ lưỡng hơn {nameMainAnalys}<br>");
                     }
                     else if (poinSub >= 3 && poinSub < 5)
                     {
-                        comment.AppendLine($"Bạn áp dụng tốt kiến thức vào bài kiểm tra {nameMainAnalys}");
+                        comment.AppendLine($"Bạn áp dụng tốt kiến thức vào bài kiểm tra {nameMainAnalys}<br>");
                     }
                     else
                     {
-                        comment.AppendLine($"Bạn hoàn thành xuất sắc {nameMainAnalys}");
+                        comment.AppendLine($"Bạn hoàn thành xuất sắc {nameMainAnalys}<br>");
                     }
                 }
                 else if (itemAnalys.Key == "N2")
                 {
                     if (poinSub < 3.5)
                     {
-                        comment.AppendLine($"Bạn cần bổ sung kiến thức và tính toán kỹ lưỡng hơn  {nameMainAnalys}");
+                        comment.AppendLine($"Bạn cần bổ sung kiến thức và tính toán kỹ lưỡng hơn  {nameMainAnalys} <br>");
                     }
                     else if (poinSub >= 3.5 && poinSub < 4)
                     {
-                        comment.AppendLine($"Bạn áp dụng tốt kiến thức vào bài kiểm tra, {nameMainAnalys}");
+                        comment.AppendLine($"Bạn áp dụng tốt kiến thức vào bài kiểm tra, {nameMainAnalys}<br>");
                     }
                     else
                     {
-                        comment.AppendLine($"Bạn hoàn thành xuất sắc {nameMainAnalys}");
+                        comment.AppendLine($"Bạn hoàn thành xuất sắc {nameMainAnalys}<br>");
                     }
                 }
                 else if (itemAnalys.Key == "N3")
                 {
                     if (poinSub < 2)
                     {
-                        comment.AppendLine($"Bạn cần bổ sung kiến thức và tính toán kỹ lưỡng hơn {nameMainAnalys}");
+                        comment.AppendLine($"Bạn cần bổ sung kiến thức và tính toán kỹ lưỡng hơn {nameMainAnalys}<br>");
                     }
                     else if (poinSub >= 2 && poinSub < 6)
                     {
-                        comment.AppendLine($"Bạn áp dụng tốt kiến thức vào bài kiểm tra {nameMainAnalys}");
+                        comment.AppendLine($"Bạn áp dụng tốt kiến thức vào bài kiểm tra {nameMainAnalys} <br>");
                     }
                     else
                     {
-                        comment.AppendLine($"Bạn hoàn thành xuất sắc {nameMainAnalys}");
+                        comment.AppendLine($"Bạn hoàn thành xuất sắc {nameMainAnalys} <br>");
                     }
                 }
             }
             if (totalPoin < 13.5)
             {
-                comment.AppendLine($"Bạn đạt kết quả kém trong bài kiểm tra lần này, bạn cần nỗ lực bổ sung kiến thức để bài kiểm tra tới đạt kết quả tốt.");
+                comment.AppendLine($"Bạn đạt kết quả kém trong bài kiểm tra lần này, bạn cần nỗ lực bổ sung kiến thức để bài kiểm tra tới đạt kết quả tốt.<br>");
             }
             else if (totalPoin >= 13.5 && totalPoin < 16)
             {
-                comment.AppendLine("Bạn đã áp dụng tốt những kiến thức trên lớp học vào bài kiểm tra, cần tiếp tục nỗ lực cho bài kiểm tra tiếp theo.");
+                comment.AppendLine("Bạn đã áp dụng tốt những kiến thức trên lớp học vào bài kiểm tra, cần tiếp tục nỗ lực cho bài kiểm tra tiếp theo.<br>");
             }
             else
             {
-                comment.AppendLine("Hoàn thành bài Kiểm tra đạt kết quả tốt, tiếp tục phấn đấu");
+                comment.AppendLine("Hoàn thành bài Kiểm tra đạt kết quả tốt, tiếp tục phấn đấu <br>");
             }
             var dataUpdate = new UserExam()
             {
