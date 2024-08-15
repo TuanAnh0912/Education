@@ -34,6 +34,18 @@ namespace Education.Core.Repositories
             var res = await _dbContext.QueryUsingStore<ExamsDetailDto>(param, "Proc_GetExamDetails");
             return res.ToList();
         }
+        public async Task<List<ExamTest>> GetExamsByExamCodes(List<string> examCodes)
+        {
+            var sql = string.Format("SELECT et.ExamTestID,et.ExamTestCode,et.ExamTestName,et.IsOrigin,et.FileID,et.SubjectCode,et.SubjectName,et.Time,et.EducationTrainName,et.SchoolName FROM exam_test et WHERE et.ExamTestCode IN ({0});", string.Join(",", examCodes.Select(x => $"'{x}'")));
+            var res =  await _dbContext.QueryUsingStore<ExamTest>(new Dictionary<string, object>(), sql, commandType: CommandType.Text);
+            return res.ToList();
+        }
+        public async Task<List<ExamTest>> GetExamsByExamIDs(List<int> examIDs)
+        {
+            var sql = string.Format("SELECT et.ExamTestID,et.ExamTestCode,et.ExamTestName,et.IsOrigin,et.FileID,et.SubjectCode,et.SubjectName,et.Time,et.EducationTrainName,et.SchoolName FROM exam_test et WHERE et.ExamTestID IN ({0});", string.Join(",", examIDs));
+            var res =  await _dbContext.QueryUsingStore<ExamTest>(new Dictionary<string, object>(), sql, commandType: CommandType.Text);
+            return res.ToList();
+        }
         public override string GetTableName()
         {
             return "Exam_test";
@@ -71,7 +83,7 @@ namespace Education.Core.Repositories
         {
             var res = new PagingResponse();
             var sql = new StringBuilder();
-            sql.Append(" (SELECT ue.UserID, req.ExamTestID, ue.ExamCode as SubExamCode from user_exam ue JOIN rulesort_exam_question req ON req.ExamCode = ue.ExamCode GROUP BY ue.UserID, req.ExamTestID, ue.ExamCode) tmp");
+            sql.Append(" (SELECT ue.UserID, req.ExamTestID, ue.ExamCode as SubExamCode, ue.IsTest from user_exam ue JOIN rulesort_exam_question req ON req.ExamCode = ue.ExamCode GROUP BY ue.UserID, req.ExamTestID, ue.ExamCode, ue.IsTest) tmp");
             sql.Append(" JOIN exam_test ut USING(ExamTestID)");
             sql.Append(" WHERE tmp.UserID = @UserID");
             
