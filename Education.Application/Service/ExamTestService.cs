@@ -95,16 +95,13 @@ namespace Education.Application.Service
         public async Task<ExamRequestModel> GetExamsByCode(string examCode)
         {
             var examCodes = new List<string>() { examCode };
+            var exam = (await _examTestRepository.GetExamsByExamCodes(examCodes)).First();
             var examsDetail = await _examTestRepository.GetExamsdetailByExamCodes(examCodes);
             var dicData = examsDetail.GroupBy(x => x.QuestionID).ToDictionary(k => k.Key, g => g.ToList());
             var originExam = new ExamRequestModel();
             foreach (var item in dicData)
             {
-                originExam.Exam = new ExamTest()
-                {
-                    ExamTestCode = item.Value.FirstOrDefault()?.ExamTestCode ?? "",
-                    ExamTestID = item.Value.FirstOrDefault()?.ExamTestID ?? 0
-                };
+                originExam.Exam = exam;
                 var lstQuestion = new QuestionAnswers()
                 {
                     Image = item.Value.FirstOrDefault()?.Image ?? "",
@@ -180,6 +177,7 @@ namespace Education.Application.Service
         }
         public async Task<ServiceResponse> GetShuffleExam(string examID)
         {
+            var examTest = (await _examTestRepository.GetExamsByExamIDs(new List<int> { int.Parse(examID) })).First();
             var dataShuffle = await _examTestRepository.GetShuffleExam(examID);
             var datasExamDic = dataShuffle.GroupBy(x => x.ExamCode).ToDictionary(k => k.Key, g => g.ToList());
             var pagingResponse = new PagingResponse();
@@ -187,7 +185,7 @@ namespace Education.Application.Service
             foreach (var dataExamDic in datasExamDic)
             {
                 var exam = new ExamRequestModel();
-                exam.Exam.ExamTestCode = dataExamDic.Key;
+                exam.Exam = examTest;
                 var dataQuestionDic = dataExamDic.Value.ToList().GroupBy(x => x.OriginQuestionID).ToDictionary(k => k.Key, g => g.ToList());
                 foreach (var item in dataQuestionDic)
                 {
