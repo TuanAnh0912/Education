@@ -21,9 +21,9 @@ namespace Education.Core.Interface
         Task<List<ExamTest>> GetExamTestsByBlockID(int BlockID);
         Task<List<ExamResultDto>> GetResultByExamCode(string examCode);
         Task<bool> UpdateUserExam(UserExam dataUpdate);
-        Task<List<DataExamDoingDto>> GetDataExamDoing(string examCode);
         Task<PagingResponse> ExamsByUser(PagingRequestModel pagingRequest, string userID);
         Task<UserExamDto> GetDetailAnalys(string examCode, Guid userID);
         Task<List<RuleSortExamQuestion>> GetShuffleExaByIDs(List<int> Ids);
+        Task<List<DataExamDoingDto>> GetDataExamDoing(string examCode, Guid userID);
     }
 }

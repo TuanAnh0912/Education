@@ -218,11 +218,12 @@ namespace Education.Core.Repositories
             return res > 0;
 
         }
-        public async Task<List<DataExamDoingDto>> GetDataExamDoing(string examCode)
+        public async Task<List<DataExamDoingDto>> GetDataExamDoing(string examCode,Guid userID)
         {
             var param = new Dictionary<string, object>()
             {
                 {"v_ExamCode",examCode },
+                {"v_UserID",userID },
             };
             var res = await _dbContext.QueryUsingStore<DataExamDoingDto>(param, "Proc_GetExamDoingByCode");
             return res.ToList();

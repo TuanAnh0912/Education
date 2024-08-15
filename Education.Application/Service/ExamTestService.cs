@@ -347,7 +347,7 @@ namespace Education.Application.Service
         }
         public async Task<ServiceResponse> GetDataExamDoingDetail(string examCode)
         {
-            var resData = await _examTestRepository.GetDataExamDoing(examCode);
+            var resData = await _examTestRepository.GetDataExamDoing(examCode,_UserID);
             var dicData = resData.GroupBy(x => x.OriginQuestionID).ToDictionary(k => k.Key, g => g.ToList());
             var data = new List<ExamDoingResponse>();
             foreach (var item in dicData)
