@@ -78,7 +78,7 @@ namespace Education.Core.Repositories
             param.Add("@offSet", offSet);
             if (!isTearcher) 
             {
-                sql.Append(" and u.UserID = @userID  ue.IsTest = TRUE limit @pageSize offset @offSet;");
+                sql.Append(" u.UserID = @userID and ue.IsTest = TRUE limit @pageSize offset @offSet;");
                 param.Add("@userID", userID);
             }
             else

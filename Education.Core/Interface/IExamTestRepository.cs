@@ -13,6 +13,8 @@ namespace Education.Core.Interface
     public interface IExamTestRepository:IGenericRepository<ExamTest>
     {
         Task<List<ExamsDetailDto>> GetExamsdetailByExamCodes(List<string> examCodes);
+        Task<List<ExamTest>> GetExamsByExamCodes(List<string> examCodes);
+        Task<List<ExamTest>> GetExamsByExamIDs(List<int> ids);
         Task<List<CorrectQuestionDto>> GetDetailCorrectQuestion(string examCode, string lstCorrectQuestion);
         Task<bool> InsertExamDetail(ExamRequestModel data);
         Task<bool> InsertShuffleExam(List<RuleSortExamQuestion> ruleSortExamQuestions, List<RuleSortQuestionAnswer> ruleSortQuestionAnswers);
