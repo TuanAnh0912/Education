@@ -18,6 +18,7 @@ namespace Education.Core.Interface
         Task<User> CheckByUserNameAndEmail(string userName);
         Task<PagingResponse> GetPagingUserExamByID(Guid userID, bool isTearcher, int pageSize, int pageIndex);
         Task<Role> GetRoleUserByID(Guid userID);
+        Task<List<UserDto>> GetUserWithoutBlock(int blockID);
         //Task<User?> GetUserByRefreshToken(string resfreshToken);
     }
 }
