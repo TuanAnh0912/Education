@@ -25,7 +25,8 @@ namespace Education.Core.Repositories
             {
                 {"v_UserID", entity.UserID},
                 {"v_UserName", entity.UserName ?? ""},
-                {"v_HashPassword",entity.HashPassword ?? ""},
+                {"v_FullName", entity.FullName ?? ""},
+                {"v_HashPassword", entity.HashPassword ?? ""},
             };
             using (var db = _dbContext.GetDbTransaction())
             {
