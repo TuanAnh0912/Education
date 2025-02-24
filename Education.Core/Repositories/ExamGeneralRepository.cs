@@ -36,7 +36,6 @@ namespace Education.Core.Repositories
             var sql = new StringBuilder();
             sql.Append(" exam_general eg");
             sql.Append(" JOIN block b USING(BlockID)");
-            sql.Append(" JOIN user_block ub USING(BlockID)");
             sql.Append(" JOIN exam_test_general etg ON eg.ExamGeneralID = etg.ExamGeneralID");
             sql.Append(" JOIN exam_test et ON etg.ExamTestID = et.ExamTestID");
             //sql.Append(" Fields like @stringWhere ");
@@ -51,9 +50,9 @@ namespace Education.Core.Repositories
                 {"@OffSet", offSet },
                 {"@StringWhere", $"%{pagingRequest.ValueWhere}%" }
             };
-            var data = await _dbContext.QueryUsingStore<object>(param, "SELECT eg.ExamGeneralID, eg.Name as ExamGeneralName, b.BlockName, et.* FROM " + sql, commandType: CommandType.Text);
+            var data = await _dbContext.QueryUsingStore<object>(param, "SELECT eg.ExamGeneralID, eg.Name as ExamGeneralName, b.BlockName, et.* FROM " + sql.ToString(), commandType: CommandType.Text);
             res.PageData = data;
-            var total = await _dbContext.QueryUsingStore<int>(param, "SELECT COUNT(1) FROM " + sql, commandType: CommandType.Text);
+            var total = await _dbContext.QueryUsingStore<int>(param, "SELECT COUNT(1) FROM " + sql.ToString(), commandType: CommandType.Text);
             res.PageSize = total.FirstOrDefault();
             return res;
         }

@@ -136,6 +136,7 @@ namespace Education.Core.Repositories
                 questionModel.SubAnalysisCode = item.SubAnalysisCode;
                 questionModel.Image = item.Image;
                 questionModel.ExamTestID = Convert.ToInt32(resInsertExam);
+                questionModel.IsMultiResult = item.IsMultiResult;
                 answerQuestion.Add(questionModel);
                 foreach (var answer in item.Answers)
                 {

@@ -14,9 +14,8 @@ namespace Education.Core.Model
         public string SubjectCode { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
-        public int AnalysisHeaderID { get; set; }
-        public decimal Point { get; set; }
-        public bool IsMain { get; set; }
-        public bool IsSystem { get; set; }
+        public decimal? Point { get; set; }
+        public bool? IsMain { get; set; }
+        public bool? IsSystem { get; set; }
     }
 }

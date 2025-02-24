@@ -20,5 +20,6 @@ namespace Education.Core.Model
         public string MainAnalysisCode { get; set; }
         public string Image { get; set; }
         public string QuestionContent { get; set; }
+        public bool? IsMultiResult { get; set; }
     }
 }

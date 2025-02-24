@@ -14,8 +14,9 @@ namespace Education.Core.Model
         public Guid UserID { get; set; }
         public string ExamCode { get; set; }
         public bool IsTest { get; set; } = false;
-        public double Point { get; set; } = 0;
+        public decimal Point { get; set; } = 0m;
         public string ResultJson { get; set; }
         public string Evaluate { get; set; }
     }
 }
+    

@@ -45,7 +45,7 @@ namespace Education.API.Controllers
             return new ServiceResponse(false, "Bạn không có quyền");
         }
         [HttpPut("update")]
-        [Authorize]
+        //[Authorize]
         public async Task<ServiceResponse> Update([FromBody] T data)
         {
             string tableName = currentType.GetCustomAttribute<TableEducationAttribute>()?.TableName ?? "";
@@ -58,8 +58,8 @@ namespace Education.API.Controllers
             return new ServiceResponse(false, "Bạn không có quyền");
         }
         [HttpDelete("delete/{id}")]
-        [Authorize]
-        public async Task<ServiceResponse> Delete([FromRoute] object id)
+        //[Authorize]
+        public async Task<ServiceResponse> Delete([FromRoute] int id) 
         {
             string tableName = currentType.GetCustomAttribute<TableEducationAttribute>()?.TableName ?? "";
             var listRole = new List<string>() { $"{tableName}.Delete" };

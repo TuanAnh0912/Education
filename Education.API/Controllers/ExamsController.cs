@@ -52,7 +52,6 @@ namespace Education.API.Controllers
         [HttpGet("all-shuff-exams")]
         public async Task<ServiceResponse> GetAllShuffleExam([FromQuery] string examID)
         {
-            //res.Data = await _examTestService.GetShuffleExam(examID);
             var res = await _examTestService.GetShuffleExam(examID);
             return res;
         }

@@ -35,7 +35,7 @@ namespace Education.Application.Service
         }
         public async Task<bool> InsertExamDetail(ExamRequestModel data)
         {
-            data.Exam.ExamTestCode = RandomString(5);
+            data.Exam.ExamTestCode = $"{data.Exam.ExamTestCode}_{RandomString(5)}";
             return await _examTestRepository.InsertExamDetail(data);
         }
         public async Task<ServiceResponse> ExamsByUser(PagingRequestModel pagingRequest)
@@ -185,7 +185,10 @@ namespace Education.Application.Service
             foreach (var dataExamDic in datasExamDic)
             {
                 var exam = new ExamRequestModel();
-                exam.Exam = examTest;
+                //examTest.ExamTestID = item.Value.FirstOrDefault()?.ExamTestID ?? 0;
+                var examTmp = JsonConvert.DeserializeObject<ExamTest>(JsonConvert.SerializeObject(examTest));
+                examTmp.ExamTestCode = dataExamDic.Key;
+                exam.Exam = examTmp;
                 var dataQuestionDic = dataExamDic.Value.ToList().GroupBy(x => x.OriginQuestionID).ToDictionary(k => k.Key, g => g.ToList());
                 foreach (var item in dataQuestionDic)
                 {
@@ -237,7 +240,7 @@ namespace Education.Application.Service
         {
 
             var resultExamByCode = await _examTestRepository.GetResultByExamCode(data.ExamCode);
-            var point = 0;
+            var point = 0m;
             var lstAnalysis = new List<AnalysisQuestionDto>();
             var dataRsByCodeDic = resultExamByCode.GroupBy(x => x.QuestionOrder).ToDictionary(k => k.Key, g => g.ToList());
             var i = 0;
@@ -248,17 +251,20 @@ namespace Education.Application.Service
                     var dataModel = data.QuestionDetails[i];
                     if (dataModel.Results.Any())
                     {
-                        var isCorrect = dataModel.Results.All(item.Value.Where(k => k.IsTrue == true).Select(l => l.OrderAnswer).OrderBy(x => x).Contains);
-                        if (isCorrect)
-                        {
-                            point += (10 / dataRsByCodeDic.Count);
+                        var isCorrect = dataModel.Results.All(item.Value.Where(k=>k.IsTrue == true).Select(l => l.OrderAnswer).OrderBy(x => x).Contains);
+                        if(isCorrect){
+                            point += (10m / dataRsByCodeDic.Count);
                             lstAnalysis.Add(new AnalysisQuestionDto()
                             {
-                                MainAnalysCode = dataModel.MainAnalysCode,
-                                MainAnalysName = dataModel.MainAnalysName,
-                                SubAnalysCode = dataModel.SubAnalysCode,
-                                SubAnalysPoint = dataModel.SubAnalysPoint
-                            });
+                                point += (10 / dataRsByCodeDic.Count);
+                                lstAnalysis.Add(new AnalysisQuestionDto()
+                                {
+                                    MainAnalysCode = dataModel.MainAnalysCode,
+                                    MainAnalysName = dataModel.MainAnalysName,
+                                    SubAnalysCode = dataModel.SubAnalysCode,
+                                    SubAnalysPoint = dataModel.SubAnalysPoint
+                                });
+                            }
                         }
                     }
                     i++;
