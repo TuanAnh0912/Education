@@ -128,6 +128,15 @@ namespace Education.Application.Service
                 Success = true,
             };
         }
+        public async Task<ServiceResponse> GetUserWithoutBlock(int blockID)
+        {
+            var res = await _userRepository.GetUserWithoutBlock(blockID);
+            return new ServiceResponse()
+            {
+                Success = res.Any(),
+                Data = res
+            };
+        }
         //public async Task<ServiceResponse> ResetPassword(string newPassword)
         //{
         //    var hashPassWord = AuthenHelpers.HashPassword(_UserName + newPassword);

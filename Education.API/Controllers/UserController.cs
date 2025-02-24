@@ -88,6 +88,12 @@ namespace Education.API.Controllers
             var rs = await _userService.InitLogin();
             return rs;
         }
+        [HttpGet("user-without-block")]
+        public async Task<ServiceResponse> GetUserWithoutBlock(int blockID)
+        {
+            var rs = await _userService.GetUserWithoutBlock(blockID);
+            return rs;
+        }
 
         //[HttpGet("role-permission")]
         //public async Task<ServiceResponse> GetAllRole()

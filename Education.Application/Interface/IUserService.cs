@@ -16,6 +16,7 @@ namespace Education.Application.Interface
         Task<ServiceResponse> Getpaging(PagingRequestModel data);
 
         Task<ServiceResponse> InitLogin();
+        Task<ServiceResponse> GetUserWithoutBlock(int blockID);
         //Task<ServiceResponse> GetAllRole();
         // Task<ServiceResponse> InsertRolePermisstion(RolePermisstionRequestModel model);
         // Task<ServiceResponse> SendMail();

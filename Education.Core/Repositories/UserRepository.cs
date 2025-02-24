@@ -90,7 +90,16 @@ namespace Education.Core.Repositories
              dataPaging.PageData = res.ToList();
             return dataPaging;
         }
-
+        public async Task<List<UserDto>> GetUserWithoutBlock(int blockID)
+        {
+            var sql = "SELECT * FROM user u LEFT JOIN user_block ub ON u.UserID = ub.UserID WHERE ub.UserID IS NULL AND ub.UserBlockID = @blockID;";
+            var param = new Dictionary<string, object>()
+            {
+                {"@blockID",blockID}
+            };
+            var res = await _dbContext.QueryUsingStore<UserDto>(param, sql, commandType: CommandType.Text);
+            return res.ToList();
+        }
         /// <summary>
         /// Hàm lấy dữ liệu cần thiết sau login
         /// </summary>

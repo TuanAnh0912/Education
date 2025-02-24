@@ -238,30 +238,37 @@ namespace Education.Application.Service
         }
         public async Task<ServiceResponse> GetResultExam(MarkTestRequestModel data)
         {
+
             var resultExamByCode = await _examTestRepository.GetResultByExamCode(data.ExamCode);
             var point = 0m;
             var lstAnalysis = new List<AnalysisQuestionDto>();
             var dataRsByCodeDic = resultExamByCode.GroupBy(x => x.QuestionOrder).ToDictionary(k => k.Key, g => g.ToList());
             var i = 0;
-            foreach (var item in dataRsByCodeDic)
+            if (data.QuestionDetails.Any())
             {
-                var dataModel = data.QuestionDetails[i];
-                if (dataModel.Results.Any())
+                foreach (var item in dataRsByCodeDic)
                 {
-                    var isCorrect = dataModel.Results.All(item.Value.Where(k=>k.IsTrue == true).Select(l => l.OrderAnswer).OrderBy(x => x).Contains);
-                    if (isCorrect)
+                    var dataModel = data.QuestionDetails[i];
+                    if (dataModel.Results.Any())
                     {
-                        point += (10m / dataRsByCodeDic.Count);
-                        lstAnalysis.Add(new AnalysisQuestionDto()
-                        {
-                            MainAnalysCode = dataModel.MainAnalysCode,
-                            MainAnalysName = dataModel.MainAnalysName,
-                            SubAnalysCode = dataModel.SubAnalysCode,
-                            SubAnalysPoint = dataModel.SubAnalysPoint
-                        });
+                        var isCorrect = dataModel.Results.All(item.Value.Where(k=>k.IsTrue == true).Select(l => l.OrderAnswer).OrderBy(x => x).Contains);
+                        if(isCorrect){
+                            point += (10m / dataRsByCodeDic.Count);
+                            lstAnalysis.Add(new AnalysisQuestionDto()
+                            {
+                                point += (10 / dataRsByCodeDic.Count);
+                                lstAnalysis.Add(new AnalysisQuestionDto()
+                                {
+                                    MainAnalysCode = dataModel.MainAnalysCode,
+                                    MainAnalysName = dataModel.MainAnalysName,
+                                    SubAnalysCode = dataModel.SubAnalysCode,
+                                    SubAnalysPoint = dataModel.SubAnalysPoint
+                                });
+                            }
+                        }
                     }
+                    i++;
                 }
-                i++;
             }
             var dicDataAnalys = lstAnalysis.GroupBy(x => x.MainAnalysCode).ToDictionary(k => k.Key, g => g.ToList());
             var dicCalculateAnalys = new Dictionary<string, object>();
